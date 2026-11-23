@@ -13,10 +13,12 @@
 <link rel="preload" href="https://krasko.uz/d/454542_3090.png" as="image" referrerpolicy="no-referrer">
 <script>
 /* интро показываем сразу, до загрузки основного скрипта; при «уменьшить движение» его нет */
+document.documentElement.className += ' js';
 if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.className += ' has-intro intro-on';
 </script>
 <link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/motion.css">
 </head>
 <body>
 <!-- интро: валик из логотипа выкрашивает слово, экран заливается красным, краска сходит -->
@@ -43,6 +45,12 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
       <a href="#calc">Расчёт краски</a>
       <a href="#delivery">Доставка</a>
       <a href="#contacts">Контакты</a>
+      <div class="nav__foot">
+        <a class="nav__tel" href="tel:+998979700642">+998 97 970-06-42</a>
+        <p>Ташкент, ул. Паркент, 74 · каждый день 9:00–18:00</p>
+        <a class="nav__wa" href="https://wa.me/998979700642" target="_blank" rel="noopener">Написать в WhatsApp</a>
+      </div>
+      <div class="nav__coat" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     </nav>
     <div class="head__side">
       <a class="head__tel" href="tel:+998979700642">+998 97 970-06-42</a>
@@ -55,6 +63,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
       </button>
     </div>
   </div>
+  <i class="head__prog" id="prog" aria-hidden="true"></i>
 </header>
 
 <main id="main">
@@ -75,7 +84,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
         <a class="btn btn--ghost" href="#calc">Рассчитать краску</a>
       </div>
       <div class="try">
-        <p class="try__label">Примерьте цвет на стене</p>
+        <p class="try__label">Примерьте цвет на стене<span class="try__touch">: нажмите на образец или смахните по стене</span></p>
         <div class="try__row" role="group" aria-label="Выбор оттенка">
           <button type="button" class="sw is-on" style="--c:#E3A72F" data-color="#E3A72F" data-name="Шафран" data-code="K-1012" aria-pressed="true"><span class="sr">Шафран</span></button>
           <button type="button" class="sw" style="--c:#B9502F" data-color="#B9502F" data-name="Глина" data-code="K-2040" aria-pressed="false"><span class="sr">Глина</span></button>
@@ -96,6 +105,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
       <span class="wall__name" id="wallName">Шафран</span>
       <span class="wall__note">1 из 10 000 оттенков</span>
     </div>
+    <span class="wall__hint">Смахните, чтобы перекрасить</span>
     <div class="wall__spot">
       <img class="wall__can" src="https://krasko.uz/thumb/2/o7oesb83A1sgmjMhkuZA2w/400r400/d/1_kraski_dlya_vnutrennih_rabot-photoroom.webp" alt="" width="266" height="400" referrerpolicy="no-referrer">
     </div>
@@ -105,10 +115,10 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
 <!-- ============ СЕРВИС ============ -->
 <section class="facts" aria-labelledby="facts-h">
   <div class="wrap">
-    <h2 class="h2" id="facts-h">Колеровка, доставка, возврат</h2>
+    <h2 class="h2" id="facts-h" data-h="roll">Колеровка, доставка, возврат</h2>
     <ul class="facts__grid">
       <li class="fact">
-        <b class="fact__n">10 000</b>
+        <b class="fact__n"><span data-count="10000">10 000</span></b>
         <span class="fact__t">оттенков</span>
         <p>Колеруем на своём оборудовании прямо в магазине.</p>
       </li>
@@ -123,7 +133,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
         <p>По Ташкенту. Для меньших заказов доставка от 45 000 сум.</p>
       </li>
       <li class="fact">
-        <b class="fact__n">14 <small>дней</small></b>
+        <b class="fact__n"><span data-count="14">14</span> <small>дней</small></b>
         <span class="fact__t">на обмен и возврат</span>
         <p>Если упаковка не вскрыта. Продукция официальная, с гарантией производителя.</p>
       </li>
@@ -135,7 +145,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
 <section class="cat" id="catalog" aria-labelledby="cat-h">
   <div class="wrap">
     <div class="sec-head">
-      <h2 class="h2" id="cat-h">Каталог</h2>
+      <h2 class="h2" id="cat-h" data-h="rise">Каталог</h2>
       <p class="sec-head__note">Больше 1 000 позиций в 11 разделах. Основной ассортимент всегда на складе в Ташкенте.</p>
     </div>
     <ul class="cat__grid">
@@ -190,26 +200,30 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
         <span class="tile__arrow" aria-hidden="true">→</span>
       </a></li>
     </ul>
-    <p class="brands"><span class="brands__l">Бренды в наличии</span> Marshall · Polisan · Alina Paint · Dulux · Knauf · Danogips · Aspro · Collex · Sandeco · Graco · Storch</p>
+    <p class="brands__l">Бренды в наличии</p>
+    <p class="sr">Marshall, Polisan, Alina Paint, Dulux, Knauf, Danogips, Aspro, Collex, Sandeco, Graco, Storch</p>
   </div>
+  <div class="mq" aria-hidden="true"><div class="mq__t"><span>Marshall</span><span>Polisan</span><span>Alina Paint</span><span>Dulux</span><span>Knauf</span><span>Danogips</span><span>Aspro</span><span>Collex</span><span>Sandeco</span><span>Graco</span><span>Storch</span><span>Marshall</span><span>Polisan</span><span>Alina Paint</span><span>Dulux</span><span>Knauf</span><span>Danogips</span><span>Aspro</span><span>Collex</span><span>Sandeco</span><span>Graco</span><span>Storch</span></div></div>
 </section>
 
 <!-- ============ ТОП ПРОДАЖ ============ -->
 <section class="top" id="top-sales" aria-labelledby="top-h">
   <div class="wrap">
     <div class="sec-head">
-      <h2 class="h2" id="top-h">Топ продаж</h2>
+      <h2 class="h2" id="top-h" data-h="drip">Топ продаж</h2>
       <p class="sec-head__note">Краски, которые берут чаще всего. Цены в сумах, как на krasko.uz.</p>
     </div>
     <ul class="goods" id="goods"></ul>
+    <div class="rail" id="rail" aria-hidden="true"><i></i></div>
   </div>
 </section>
 
 <!-- ============ КЛУБНАЯ КАРТА ============ -->
 <section class="club" id="club" aria-labelledby="club-h">
+  <div class="roller" id="roller" aria-hidden="true"><div class="roller__arm"></div><div class="roller__drum"></div></div>
   <div class="wrap club__in">
     <div class="club__text">
-      <h2 class="h2" id="club-h">Клубная карта KRASKO</h2>
+      <h2 class="h2" id="club-h" data-h="rise">Клубная карта KRASKO</h2>
       <p class="club__lead">С картой вы покупаете товары по себестоимости, без наценки. Скидки от 25% до 65%.</p>
       <a class="btn btn--light" href="https://wa.me/998979700642?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BE%D1%84%D0%BE%D1%80%D0%BC%D0%B8%D1%82%D1%8C%20%D0%BA%D0%BB%D1%83%D0%B1%D0%BD%D1%83%D1%8E%20%D0%BA%D0%B0%D1%80%D1%82%D1%83%20KRASKO." target="_blank" rel="noopener">Оформить карту в WhatsApp</a>
       <p class="club__low"><b>Нашли цену ниже?</b> Дадим ещё скидку.</p>
@@ -221,6 +235,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
         <span class="card__kind">Клубная карта</span>
         <span class="card__off">−25…65%</span>
         <span class="card__num">0000 1999 2026</span>
+        <i class="card__glare"></i>
       </div>
     </div>
   </div>
@@ -230,7 +245,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
 <section class="calc" id="calc" aria-labelledby="calc-h">
   <div class="wrap calc__in">
     <div class="calc__form">
-      <h2 class="h2" id="calc-h">Сколько краски купить</h2>
+      <h2 class="h2" id="calc-h" data-h="roll">Сколько краски купить</h2>
       <p class="calc__lead">Укажите площадь и число слоёв. Посчитаем объём, а вы отправите расчёт продавцу.</p>
 
       <label class="field">
@@ -261,6 +276,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
 
     <div class="calc__out">
       <div class="calc__swatch">
+        <i class="calc__lvl" id="calcLvl" aria-hidden="true"><svg viewBox="0 0 200 20" preserveAspectRatio="none"><path d="M0 10 Q25 0 50 10 T100 10 T150 10 T200 10 V20 H0Z"/></svg></i>
         <span class="calc__code" id="calcCode">K-1012</span>
         <span class="calc__name" id="calcName">Шафран</span>
       </div>
@@ -277,7 +293,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
 <!-- ============ ДОСТАВКА И ОПЛАТА ============ -->
 <section class="dlv" id="delivery" aria-labelledby="dlv-h">
   <div class="wrap">
-    <h2 class="h2" id="dlv-h">Доставка и оплата</h2>
+    <h2 class="h2" id="dlv-h" data-h="rise">Доставка и оплата</h2>
     <div class="dlv__grid">
       <dl class="dlist">
         <div><dt>По Ташкенту</dt><dd>В день заказа, с 9:00 до 18:00. От 45 000 сум, при заказе от 500 000 сум бесплатно.</dd></div>
@@ -299,7 +315,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
 <section class="cont" id="contacts" aria-labelledby="cont-h">
   <div class="wrap cont__in">
     <div>
-      <h2 class="h2" id="cont-h">Магазин на Паркентской</h2>
+      <h2 class="h2" id="cont-h" data-h="roll">Магазин на Паркентской</h2>
       <p class="cont__addr">Ташкент, Яшнабадский район,<br>ул. Паркент, 74, блок 3–4</p>
       <p class="cont__hours">Каждый день с 9:00 до 18:00</p>
     </div>
@@ -318,6 +334,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
 </main>
 
 <footer class="foot">
+  <div class="wrap"><div class="foot__big" id="footBig" aria-hidden="true"><span class="foot__big-o">KRASKO</span><span class="foot__big-f">KRASKO</span></div></div>
   <div class="wrap foot__in">
     <span class="foot__word">KRASKO</span>
     <p class="foot__copy">© 1999–2026 KRASKO. Строительный магазин в Ташкенте.</p>
@@ -327,9 +344,9 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
 
 <!-- нижняя панель на телефоне -->
 <nav class="mbar" aria-label="Быстрые действия">
-  <a href="tel:+998979700642">Позвонить</a>
-  <a href="https://wa.me/998979700642" target="_blank" rel="noopener">WhatsApp</a>
-  <button type="button" data-cart-open>Корзина <span data-cart-count hidden>0</span></button>
+  <a href="tel:+998979700642"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.700a2 2 0 0 1 2-2.200Z"/></svg>Позвонить</a>
+  <a href="https://wa.me/998979700642" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.300-4.200A8 8 0 1 1 8.300 19L4 20Z"/><path d="M9.200 9.300c.300 2.400 2.100 4.300 4.500 4.900"/></svg>WhatsApp</a>
+  <button type="button" data-cart-open><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.400l2.100 10.200a1.500 1.500 0 0 0 1.500 1.200h8.200a1.500 1.500 0 0 0 1.500-1.200L20 7.500H6.200"/><circle cx="9.500" cy="19.500" r="1.200"/><circle cx="17" cy="19.500" r="1.200"/></svg>Корзина <span data-cart-count hidden>0</span></button>
 </nav>
 
 <!-- корзина -->
@@ -351,5 +368,6 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.doc
 </div>
 
 <script src="js/main.js" defer></script>
+<script src="js/motion.js" defer></script>
 </body>
 </html>

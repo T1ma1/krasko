@@ -1,4 +1,5 @@
-/* KRASKO — набросок главной: перекраска стены, товары, корзина → WhatsApp, расчёт краски. */
+/* KRASKO — набросок главной: перекраска стены, товары, корзина → WhatsApp, расчёт краски.
+   Появление блоков и сцены по прокрутке — в js/motion.js. */
 (function () {
   'use strict';
 
@@ -42,6 +43,7 @@
       intro.parentNode.removeChild(intro);
       document.removeEventListener('pointerdown', finish);
       document.removeEventListener('keydown', finish);
+      document.dispatchEvent(new Event('intro:done'));
     };
     if (!root.classList.contains('has-intro')) { finish(); return; }
 
@@ -123,11 +125,15 @@
     updateCalc();
   };
 
-  var repaint = function (color) {
+  // лёгкий отклик вибрацией на Android; только после настоящего касания, иначе браузер ругается в консоль
+  var tick = function () { if (navigator.vibrate && navigator.userActivation && navigator.userActivation.isActive) { try { navigator.vibrate(8); } catch (e) { /* не везде разрешено */ } } };
+
+  // dir: 1 — слой идёт справа (как при загрузке), -1 — слева (смахнули вправо)
+  var repaint = function (color, dir) {
     if (painting) { painting.remove(); painting = null; }
     if (reduce) { base.style.setProperty('--c', color); return; }
     var coat = document.createElement('div');
-    coat.className = 'wall__coat is-rolling';
+    coat.className = 'wall__coat is-rolling' + (dir < 0 ? ' wall__coat--l' : '');
     coat.style.setProperty('--c', color);
     coat.innerHTML = bandsHtml();
     wall.insertBefore(coat, base.nextSibling);
@@ -143,16 +149,41 @@
   base.style.setProperty('--c', state.color);
   if (!reduce) base.classList.add('is-rolling'); // первый слой при загрузке
 
-  $$('.sw').forEach(function (b) {
-    b.addEventListener('click', function () {
-      if (b.classList.contains('is-on')) return;
-      $$('.sw').forEach(function (x) { x.classList.remove('is-on'); x.setAttribute('aria-pressed', 'false'); });
-      b.classList.add('is-on');
-      b.setAttribute('aria-pressed', 'true');
-      state = { color: b.dataset.color, name: b.dataset.name, code: b.dataset.code };
-      repaint(state.color);
-      applyMeta();
-    });
+  var sws = $$('.sw');
+  var chip = $('.wall__chip'), spot = $('.wall__spot');
+  var pick = function (b, dir) {
+    if (b.classList.contains('is-on')) return;
+    wall.classList.add('is-used'); // подсказка «смахните» больше не нужна
+    sws.forEach(function (x) { x.classList.remove('is-on'); x.setAttribute('aria-pressed', 'false'); });
+    b.classList.add('is-on');
+    b.setAttribute('aria-pressed', 'true');
+    state = { color: b.dataset.color, name: b.dataset.name, code: b.dataset.code };
+    repaint(state.color, dir);
+    applyMeta();
+    tick();
+    if (!reduce && chip.animate) {
+      // подпись оттенка меняется вместе с проходом валика, ведро чуть вздрагивает
+      chip.animate([{ opacity: 0, transform: 'translateY(.5em)' }, { opacity: 1, transform: 'none' }], { duration: 420, delay: 160, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' });
+      spot.animate([{ scale: 1 }, { scale: .94 }, { scale: 1 }], { duration: 480, easing: 'cubic-bezier(.22,1,.36,1)' });
+    }
+  };
+  sws.forEach(function (b) { b.addEventListener('click', function () { pick(b, 1); }); });
+
+  // по стене можно смахнуть (следующий / предыдущий оттенок) или просто нажать
+  var stepColor = function (d) {
+    var i = 0;
+    sws.forEach(function (x, n) { if (x.classList.contains('is-on')) i = n; });
+    pick(sws[(i + d + sws.length) % sws.length], d);
+  };
+  var press = null;
+  wall.addEventListener('pointerdown', function (e) { press = { x: e.clientX, y: e.clientY }; });
+  wall.addEventListener('pointercancel', function () { press = null; });
+  wall.addEventListener('pointerup', function (e) {
+    if (!press) return;
+    var dx = e.clientX - press.x, dy = e.clientY - press.y;
+    press = null;
+    if (Math.abs(dx) > 36 && Math.abs(dx) > Math.abs(dy) * 1.2) stepColor(dx < 0 ? 1 : -1);
+    else if (Math.abs(dx) < 8 && Math.abs(dy) < 8) stepColor(1);
   });
 
   /* ---------- товары ---------- */
@@ -176,6 +207,12 @@
       '</div>' +
     '</article></li>';
   }).join('');
+
+  var railThumb = $('#rail i');
+  goodsEl.addEventListener('scroll', function () {
+    var max = goodsEl.scrollWidth - goodsEl.clientWidth;
+    railThumb.style.transform = 'translateX(' + (max > 0 ? goodsEl.scrollLeft / max * 300 : 0).toFixed(1) + '%)';
+  }, { passive: true });
 
   /* ---------- корзина ---------- */
   var KEY = 'krasko-cart';
@@ -228,10 +265,39 @@
     if (lastFocus) lastFocus.focus();
   };
 
+  // фото товара летит в корзину: в шапку на компьютере, в нижнюю панель на телефоне
+  var fly = function (btn) {
+    if (reduce || !btn.animate) return;
+    var img = $('.good__pic img', btn.closest('.good'));
+    var target = $$('[data-cart-open]').filter(function (el) { return el.getClientRects().length; })[0];
+    if (!img || !target) return;
+    var a = img.getBoundingClientRect(), b = target.getBoundingClientRect();
+    var ghost = document.createElement('img');
+    ghost.src = img.currentSrc || img.src;
+    ghost.referrerPolicy = 'no-referrer';
+    ghost.alt = '';
+    ghost.className = 'fly';
+    ghost.style.cssText = 'left:' + a.left + 'px;top:' + a.top + 'px;width:' + a.width + 'px;height:' + a.height + 'px';
+    document.body.appendChild(ghost);
+    var dx = b.left + b.width / 2 - (a.left + a.width / 2);
+    var dy = b.top + b.height / 2 - (a.top + a.height / 2);
+    var lift = dy < 0 ? 40 : -70; // дуга: вверх летим с подъёмом, вниз — с подскоком
+    var anim = ghost.animate([
+      { transform: 'translate(0,0) scale(1)', opacity: 1 },
+      { transform: 'translate(' + dx * .45 + 'px,' + (dy * .35 + lift) + 'px) scale(.55)', opacity: 1, offset: .5 },
+      { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + (30 / a.width).toFixed(3) + ')', opacity: .25 }
+    ], { duration: 700, easing: 'cubic-bezier(.65,0,.35,1)' });
+    anim.onfinish = anim.oncancel = function () {
+      if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
+      target.animate([{ scale: 1 }, { scale: 1.14 }, { scale: 1 }], { duration: 320, easing: 'cubic-bezier(.22,1,.36,1)' });
+    };
+  };
+
   document.addEventListener('click', function (e) {
     var t = e.target.closest('[data-add],[data-inc],[data-dec],[data-cart-open],[data-cart-close]');
     if (!t) return;
     if (t.dataset.add) {
+      fly(t); tick();
       cart[t.dataset.add] = (cart[t.dataset.add] || 0) + 1;
       t.classList.add('is-added');
       setTimeout(function () { t.classList.remove('is-added'); }, 700);
@@ -247,6 +313,36 @@
       closeCart();
     }
   });
+  // на телефоне корзина — шторка снизу: тянем за шапку вниз, чтобы закрыть
+  var panel = $('.drawer__panel'), shade = $('.drawer__shade'), dhead = $('.drawer__head');
+  var isSheet = window.matchMedia('(max-width: 860px)');
+  var pull = null;
+  dhead.addEventListener('pointerdown', function (e) {
+    if (!isSheet.matches || e.target.closest('button')) return;
+    pull = { y: e.clientY, t: e.timeStamp, dy: 0 };
+    dhead.setPointerCapture(e.pointerId);
+    panel.style.transition = 'none';
+    shade.style.transition = 'none';
+  });
+  dhead.addEventListener('pointermove', function (e) {
+    if (!pull) return;
+    pull.dy = Math.max(0, e.clientY - pull.y);
+    panel.style.transform = 'translateY(' + pull.dy + 'px)';
+    shade.style.opacity = String(1 - Math.min(1, pull.dy / panel.offsetHeight));
+  });
+  var endPull = function (e) {
+    if (!pull) return;
+    var speed = pull.dy / Math.max(1, e.timeStamp - pull.t);
+    var shut = pull.dy > 110 || (speed > .5 && pull.dy > 30);
+    pull = null;
+    void panel.offsetWidth; // фиксируем положение под пальцем, дальше доведёт переход
+    panel.style.transition = ''; shade.style.transition = '';
+    panel.style.transform = ''; shade.style.opacity = '';
+    if (shut) closeCart();
+  };
+  dhead.addEventListener('pointerup', endPull);
+  dhead.addEventListener('pointercancel', endPull);
+
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
     if (!drawer.hidden) closeCart();
@@ -262,6 +358,8 @@
     var litres = Math.ceil(a * layers / cover);
     $('#litres').textContent = litres;
     area.style.setProperty('--fill', ((a - 5) / 295 * 100) + '%');
+    // чем больше литров, тем выше уровень краски в образце (не ниже половины: там подпись оттенка)
+    $('#calcLvl').style.transform = 'translateY(' + (50 - 50 * Math.min(1, litres / 60)).toFixed(1) + '%)';
     var surf = cover === 10 ? 'гладкая' : 'фактурная';
     $('#calcWa').href = wa('Здравствуйте! Расчёт с сайта: стены ' + a + ' м², слоёв: ' + layers + ', поверхность ' + surf + '. Нужно примерно ' + litres + ' л краски. Оттенок: ' + state.name + '. Подскажите, что выбрать?');
     $('#calcSmeta').href = wa('Здравствуйте! Нужен выезд специалиста на объект для сметы. Площадь стен около ' + a + ' м².');
@@ -270,18 +368,6 @@
   areaNum.addEventListener('input', function () { if (areaNum.value) { area.value = areaNum.value; updateCalc(); } });
   areaNum.addEventListener('blur', function () { areaNum.value = area.value; });
   $$('input[name="layers"], input[name="surface"]').forEach(function (r) { r.addEventListener('change', updateCalc); });
-
-  /* ---------- карта выезжает один раз ---------- */
-  var card = $('.club__card');
-  if (!reduce && 'IntersectionObserver' in window) {
-    card.style.opacity = '0';
-    new IntersectionObserver(function (en, io) {
-      if (!en[0].isIntersecting) return;
-      card.style.opacity = '';
-      card.classList.add('is-in');
-      io.disconnect();
-    }, { threshold: .35 }).observe(card);
-  }
 
   applyMeta();
   renderCart();
