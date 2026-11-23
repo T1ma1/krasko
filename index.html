@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KRASKO — краски и материалы для ремонта в Ташкенте</title>
+<meta name="description" content="Строительный магазин KRASKO в Ташкенте: краски, грунты, эмали, инструмент. Колеровка на месте в 10 000 оттенков, доставка в день заказа.">
+<meta name="robots" content="noindex, nofollow"><!-- демо для клиента: убрать при запуске на боевом домене -->
+<meta name="theme-color" content="#F3F0E9">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/unbounded-cyrillic-cb504d.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/onest-normal-300-700-cyrillic-d1abf1.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://krasko.uz/d/454542_3090.png" as="image" referrerpolicy="no-referrer">
+<script>
+/* интро показываем сразу, до загрузки основного скрипта; при «уменьшить движение» его нет */
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.className += ' has-intro intro-on';
+</script>
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- интро: валик из логотипа выкрашивает слово, экран заливается красным, краска сходит -->
+<div class="intro" id="intro" data-phase="wait" aria-hidden="true">
+  <div class="intro__mark">
+    <img class="intro__word" src="https://krasko.uz/d/454542_3090.png" alt="" referrerpolicy="no-referrer">
+    <img class="intro__roll" src="https://krasko.uz/d/454542_3090.png" alt="" referrerpolicy="no-referrer">
+  </div>
+  <div class="intro__coat"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <img class="intro__white" src="https://krasko.uz/d/454542_3090.png" alt="" referrerpolicy="no-referrer">
+</div>
+
+<a class="skip" href="#main">К содержимому</a>
+
+<header class="head" id="head">
+  <div class="wrap head__in">
+    <a class="logo" href="#top" aria-label="KRASKO, на главную">
+      <img src="https://krasko.uz/d/454542_3090.png" alt="KRASKO" width="756" height="224" referrerpolicy="no-referrer">
+    </a>
+    <nav class="nav" id="nav" aria-label="Разделы сайта">
+      <a href="#catalog">Каталог</a>
+      <a href="#top-sales">Топ продаж</a>
+      <a href="#club">Клубная карта</a>
+      <a href="#calc">Расчёт краски</a>
+      <a href="#delivery">Доставка</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <div class="head__side">
+      <a class="head__tel" href="tel:+998979700642">+998 97 970-06-42</a>
+      <button class="cartbtn" type="button" data-cart-open aria-label="Открыть корзину">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 4h2.4l2.1 10.2a1.5 1.5 0 0 0 1.5 1.2h8.2a1.5 1.5 0 0 0 1.5-1.2L20 7.5H6.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="19.5" r="1.4" fill="currentColor"/><circle cx="17" cy="19.5" r="1.4" fill="currentColor"/></svg>
+        <span class="cartbtn__n" data-cart-count hidden>0</span>
+      </button>
+      <button class="burger" type="button" id="burger" aria-controls="nav" aria-expanded="false" aria-label="Меню">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ ПЕРВЫЙ ЭКРАН: стена, которую можно перекрасить ============ -->
+<section class="hero" id="top">
+  <div class="wrap hero__in">
+    <div class="hero__text">
+      <p class="eyebrow">Строительный магазин · Ташкент · с 1999 года</p>
+      <h1 class="hero__h">
+        <span class="line"><span>Краски</span></span>
+        <span class="line"><span>для ремонта</span></span>
+        <span class="line"><span>в Ташкенте</span></span>
+      </h1>
+      <p class="hero__lead">Колеруем при вас в любой из 10 000 оттенков и привозим в день заказа. В каталоге больше 1 000 товаров: краски, грунты, эмали и инструмент.</p>
+      <div class="hero__cta">
+        <a class="btn btn--main" href="#catalog">Открыть каталог</a>
+        <a class="btn btn--ghost" href="#calc">Рассчитать краску</a>
+      </div>
+      <div class="try">
+        <p class="try__label">Примерьте цвет на стене</p>
+        <div class="try__row" role="group" aria-label="Выбор оттенка">
+          <button type="button" class="sw is-on" style="--c:#E3A72F" data-color="#E3A72F" data-name="Шафран" data-code="K-1012" aria-pressed="true"><span class="sr">Шафран</span></button>
+          <button type="button" class="sw" style="--c:#B9502F" data-color="#B9502F" data-name="Глина" data-code="K-2040" aria-pressed="false"><span class="sr">Глина</span></button>
+          <button type="button" class="sw" style="--c:#8F1D2C" data-color="#8F1D2C" data-name="Гранат" data-code="K-3027" aria-pressed="false"><span class="sr">Гранат</span></button>
+          <button type="button" class="sw" style="--c:#9BAF7C" data-color="#9BAF7C" data-name="Фисташка" data-code="K-6021" aria-pressed="false"><span class="sr">Фисташка</span></button>
+          <button type="button" class="sw" style="--c:#2B7FA6" data-color="#2B7FA6" data-name="Лазурь" data-code="K-5015" aria-pressed="false"><span class="sr">Лазурь</span></button>
+          <button type="button" class="sw" style="--c:#243463" data-color="#243463" data-name="Индиго" data-code="K-5003" aria-pressed="false"><span class="sr">Индиго</span></button>
+          <button type="button" class="sw" style="--c:#E9E2D3" data-color="#E9E2D3" data-name="Хлопок" data-code="K-9001" aria-pressed="false"><span class="sr">Хлопок</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wall" id="wall" aria-hidden="true">
+    <div class="wall__coat wall__coat--base" id="wallBase"></div>
+    <div class="wall__chip">
+      <span class="wall__code" id="wallCode">K-1012</span>
+      <span class="wall__name" id="wallName">Шафран</span>
+      <span class="wall__note">1 из 10 000 оттенков</span>
+    </div>
+    <div class="wall__spot">
+      <img class="wall__can" src="https://krasko.uz/thumb/2/o7oesb83A1sgmjMhkuZA2w/400r400/d/1_kraski_dlya_vnutrennih_rabot-photoroom.webp" alt="" width="266" height="400" referrerpolicy="no-referrer">
+    </div>
+  </div>
+</section>
+
+<!-- ============ СЕРВИС ============ -->
+<section class="facts" aria-labelledby="facts-h">
+  <div class="wrap">
+    <h2 class="h2" id="facts-h">Колеровка, доставка, возврат</h2>
+    <ul class="facts__grid">
+      <li class="fact">
+        <b class="fact__n">10 000</b>
+        <span class="fact__t">оттенков</span>
+        <p>Колеруем на своём оборудовании прямо в магазине.</p>
+      </li>
+      <li class="fact">
+        <b class="fact__n">2–3 <small>часа</small></b>
+        <span class="fact__t">экспресс-доставка</span>
+        <p>Обычная доставка по Ташкенту в день заказа, если товар есть на складе.</p>
+      </li>
+      <li class="fact">
+        <b class="fact__n">0 <small>сум</small></b>
+        <span class="fact__t">доставка от 500 000 сум</span>
+        <p>По Ташкенту. Для меньших заказов доставка от 45 000 сум.</p>
+      </li>
+      <li class="fact">
+        <b class="fact__n">14 <small>дней</small></b>
+        <span class="fact__t">на обмен и возврат</span>
+        <p>Если упаковка не вскрыта. Продукция официальная, с гарантией производителя.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ КАТАЛОГ ============ -->
+<section class="cat" id="catalog" aria-labelledby="cat-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="h2" id="cat-h">Каталог</h2>
+      <p class="sec-head__note">Больше 1 000 позиций в 11 разделах. Основной ассортимент всегда на складе в Ташкенте.</p>
+    </div>
+    <ul class="cat__grid">
+      <li><a class="tile tile--wide" href="https://krasko.uz/magazin/folder/kraski-dlya-vnutrennih-rabot">
+        <span class="tile__n">Краски для внутренних работ</span>
+        <span class="tile__d">Для стен и потолков, кухни и ванной, детской. Декоративные штукатурки и колеры.</span>
+        <img src="https://krasko.uz/thumb/2/o7oesb83A1sgmjMhkuZA2w/400r400/d/1_kraski_dlya_vnutrennih_rabot-photoroom.webp" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile tile--wide" href="https://krasko.uz/magazin/folder/kraski-dlya-fasadnyh-rabot">
+        <span class="tile__n">Краски для фасадных работ</span>
+        <span class="tile__d">Фасадные краски и штукатурки, лаки и пропитки, краски для металла и дорожной разметки.</span>
+        <img src="https://krasko.uz/thumb/2/1CCuUru9-mvcH0acp7NoNA/400r400/d/2_kraski_dlya_fasadnyh_rabot-photoroom.webp" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="https://krasko.uz/magazin/folder/instrumenty-dlya-pokraski">
+        <span class="tile__n">Инструменты для покраски</span>
+        <img src="https://krasko.uz/thumb/2/OdLmMcJRAgrWgZMUbXziAQ/400r400/d/3_instrumenty_dlya_pokraski-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="https://krasko.uz/magazin/folder/emali-1">
+        <span class="tile__n">Эмали</span>
+        <img src="https://krasko.uz/thumb/2/lx5Xr7X72uOUNzW03WlrvA/400r400/d/4_emali-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="https://krasko.uz/magazin/folder/pokrytiya-dlya-dereva">
+        <span class="tile__n">Покрытия для дерева</span>
+        <img src="https://krasko.uz/thumb/2/kbsiTL2MCZl6MgsG_5-A_g/400r400/d/5_pokrytiya_dlya_dereva-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile tile--dark" href="https://krasko.uz/magazin/folder/podgotovka-poverhnosti-k-pokraske-i-shtukaturke">
+        <span class="tile__n">Грунтовки и шпаклёвки</span>
+        <img src="https://krasko.uz/thumb/2/VwITM0gN5Pn4ePgPS9DXow/400r400/d/undefined_1.webp" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="https://krasko.uz/magazin/folder/peny-germetiki-i-uplotniteli">
+        <span class="tile__n">Пены и герметики</span>
+        <img src="https://krasko.uz/thumb/2/t2oMzKZyx-HCZSMlC1nJGA/400r400/d/6_peny_germetiki_i_uplotniteli-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="https://krasko.uz/magazin/folder/klei-1">
+        <span class="tile__n">Клеи</span>
+        <img src="https://krasko.uz/thumb/2/CX8iV2UZ18-groQN32jdzw/400r400/d/7_klei-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="https://krasko.uz/magazin/folder/malyarnye-i-upakovochnye-lenty">
+        <span class="tile__n">Малярные ленты</span>
+        <img src="https://krasko.uz/thumb/2/xonwXpS1JIZJ925KG1V6xg/400r400/d/8_malyarnye_i_upakovochnye_lenty-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="https://krasko.uz/magazin/folder/okrasochnye-apparaty">
+        <span class="tile__n">Окрасочные аппараты</span>
+        <img src="https://krasko.uz/thumb/2/Ts6olcLBXYt9vlLdTBTn3Q/400r400/d/10_okrasochnye_apparaty-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="https://krasko.uz/magazin/folder/instrumenty-1">
+        <span class="tile__n">Инструмент мастера</span>
+        <img src="https://krasko.uz/thumb/2/ZMwkwqxMD47Mq09wYxnICA/400r400/d/11_proyavochnye_instrument-photoroom.webp" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile tile--all" href="https://krasko.uz/magazin">
+        <span class="tile__n">Весь каталог</span>
+        <span class="tile__arrow" aria-hidden="true">→</span>
+      </a></li>
+    </ul>
+    <p class="brands"><span class="brands__l">Бренды в наличии</span> Marshall · Polisan · Alina Paint · Dulux · Knauf · Danogips · Aspro · Collex · Sandeco · Graco · Storch</p>
+  </div>
+</section>
+
+<!-- ============ ТОП ПРОДАЖ ============ -->
+<section class="top" id="top-sales" aria-labelledby="top-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="h2" id="top-h">Топ продаж</h2>
+      <p class="sec-head__note">Краски, которые берут чаще всего. Цены в сумах, как на krasko.uz.</p>
+    </div>
+    <ul class="goods" id="goods"></ul>
+  </div>
+</section>
+
+<!-- ============ КЛУБНАЯ КАРТА ============ -->
+<section class="club" id="club" aria-labelledby="club-h">
+  <div class="wrap club__in">
+    <div class="club__text">
+      <h2 class="h2" id="club-h">Клубная карта KRASKO</h2>
+      <p class="club__lead">С картой вы покупаете товары по себестоимости, без наценки. Скидки от 25% до 65%.</p>
+      <a class="btn btn--light" href="https://wa.me/998979700642?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BE%D1%84%D0%BE%D1%80%D0%BC%D0%B8%D1%82%D1%8C%20%D0%BA%D0%BB%D1%83%D0%B1%D0%BD%D1%83%D1%8E%20%D0%BA%D0%B0%D1%80%D1%82%D1%83%20KRASKO." target="_blank" rel="noopener">Оформить карту в WhatsApp</a>
+      <p class="club__low"><b>Нашли цену ниже?</b> Дадим ещё скидку.</p>
+    </div>
+    <div class="club__card" aria-hidden="true">
+      <div class="card card--back"></div>
+      <div class="card card--front">
+        <span class="card__brand">KRASKO</span>
+        <span class="card__kind">Клубная карта</span>
+        <span class="card__off">−25…65%</span>
+        <span class="card__num">0000 1999 2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ РАСЧЁТ КРАСКИ ============ -->
+<section class="calc" id="calc" aria-labelledby="calc-h">
+  <div class="wrap calc__in">
+    <div class="calc__form">
+      <h2 class="h2" id="calc-h">Сколько краски купить</h2>
+      <p class="calc__lead">Укажите площадь и число слоёв. Посчитаем объём, а вы отправите расчёт продавцу.</p>
+
+      <label class="field">
+        <span class="field__l">Площадь стен, м²</span>
+        <span class="field__row">
+          <input type="range" id="area" min="5" max="300" step="1" value="45" aria-label="Площадь стен, квадратных метров">
+          <input type="number" id="areaNum" min="5" max="300" step="1" value="45" inputmode="numeric" aria-label="Площадь стен числом">
+        </span>
+      </label>
+
+      <fieldset class="field">
+        <legend class="field__l">Слоёв</legend>
+        <div class="seg" id="layers">
+          <label><input type="radio" name="layers" value="1"><span>1</span></label>
+          <label><input type="radio" name="layers" value="2" checked><span>2</span></label>
+          <label><input type="radio" name="layers" value="3"><span>3</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend class="field__l">Поверхность</legend>
+        <div class="seg seg--text" id="surface">
+          <label><input type="radio" name="surface" value="10" checked><span>Гладкая</span></label>
+          <label><input type="radio" name="surface" value="7"><span>Фактурная</span></label>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="calc__out">
+      <div class="calc__swatch">
+        <span class="calc__code" id="calcCode">K-1012</span>
+        <span class="calc__name" id="calcName">Шафран</span>
+      </div>
+      <p class="calc__res"><span class="calc__approx">примерно</span> <b id="litres">9</b> <span>л краски</span></p>
+      <p class="calc__hint">Расчёт примерный: расход зависит от краски и основания, точная цифра есть на банке. На большой объект специалист приедет сам и составит смету.</p>
+      <div class="calc__cta">
+        <a class="btn btn--main" id="calcWa" href="https://wa.me/998979700642" target="_blank" rel="noopener">Отправить расчёт в WhatsApp</a>
+        <a class="btn btn--ghost" id="calcSmeta" href="https://wa.me/998979700642" target="_blank" rel="noopener">Вызвать специалиста</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ДОСТАВКА И ОПЛАТА ============ -->
+<section class="dlv" id="delivery" aria-labelledby="dlv-h">
+  <div class="wrap">
+    <h2 class="h2" id="dlv-h">Доставка и оплата</h2>
+    <div class="dlv__grid">
+      <dl class="dlist">
+        <div><dt>По Ташкенту</dt><dd>В день заказа, с 9:00 до 18:00. От 45 000 сум, при заказе от 500 000 сум бесплатно.</dd></div>
+        <div><dt>Экспресс</dt><dd>За 2–3 часа, если товар на складе.</dd></div>
+        <div><dt>В Ташкентскую область</dt><dd>От 100 000 сум, считаем по расстоянию и объёму. Крупные заказы везём грузовым транспортом.</dd></div>
+        <div><dt>Самовывоз</dt><dd>В день заказа из магазина на Паркентской.</dd></div>
+      </dl>
+      <dl class="dlist">
+        <div><dt>В магазине</dt><dd>Наличные, карта, QR-код или Click.</dd></div>
+        <div><dt>С доставкой</dt><dd>Оплата товара полностью, по области доставка оплачивается отдельно.</dd></div>
+        <div><dt>Юридическим лицам</dt><dd>Перечисление на расчётный счёт. Счёт выставляем через Didox, на почту или в Telegram.</dd></div>
+        <div><dt>Оптом и в розницу</dt><dd>Для строительных компаний, прорабов и дизайнеров действуют особые условия.</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ============ КОНТАКТЫ ============ -->
+<section class="cont" id="contacts" aria-labelledby="cont-h">
+  <div class="wrap cont__in">
+    <div>
+      <h2 class="h2" id="cont-h">Магазин на Паркентской</h2>
+      <p class="cont__addr">Ташкент, Яшнабадский район,<br>ул. Паркент, 74, блок 3–4</p>
+      <p class="cont__hours">Каждый день с 9:00 до 18:00</p>
+    </div>
+    <div class="cont__act">
+      <a class="cont__tel" href="tel:+998979700642">+998 97 970-06-42</a>
+      <div class="cont__btns">
+        <a class="btn btn--main" href="https://wa.me/998979700642" target="_blank" rel="noopener">Написать в WhatsApp</a>
+        <a class="btn btn--ghost" href="https://t.me/krasko_uz" target="_blank" rel="noopener">Открыть Telegram</a>
+        <a class="btn btn--ghost" href="https://yandex.uz/maps/?text=%D0%A2%D0%B0%D1%88%D0%BA%D0%B5%D0%BD%D1%82%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%9F%D0%B0%D1%80%D0%BA%D0%B5%D0%BD%D1%82%2C%2074" target="_blank" rel="noopener">Построить маршрут</a>
+      </div>
+      <a class="cont__mail" href="mailto:krasko.zakaz@gmail.com">krasko.zakaz@gmail.com</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <span class="foot__word">KRASKO</span>
+    <p class="foot__copy">© 1999–2026 KRASKO. Строительный магазин в Ташкенте.</p>
+    <a class="foot__ig" href="https://www.instagram.com/krasko_tashkent" target="_blank" rel="noopener">Instagram</a>
+  </div>
+</footer>
+
+<!-- нижняя панель на телефоне -->
+<nav class="mbar" aria-label="Быстрые действия">
+  <a href="tel:+998979700642">Позвонить</a>
+  <a href="https://wa.me/998979700642" target="_blank" rel="noopener">WhatsApp</a>
+  <button type="button" data-cart-open>Корзина <span data-cart-count hidden>0</span></button>
+</nav>
+
+<!-- корзина -->
+<div class="drawer" id="drawer" hidden>
+  <div class="drawer__shade" data-cart-close></div>
+  <aside class="drawer__panel" role="dialog" aria-modal="true" aria-labelledby="drawer-h">
+    <div class="drawer__head">
+      <h2 id="drawer-h">Корзина</h2>
+      <button type="button" class="drawer__x" data-cart-close aria-label="Закрыть корзину">×</button>
+    </div>
+    <ul class="drawer__list" id="cartList"></ul>
+    <p class="drawer__empty" id="cartEmpty">В корзине пусто. Добавьте товары из раздела «Топ продаж».</p>
+    <div class="drawer__foot" id="cartFoot" hidden>
+      <p class="drawer__sum"><span>Итого</span><b id="cartSum">0 сум</b></p>
+      <p class="drawer__free" id="cartFree"></p>
+      <a class="btn btn--main" id="cartSend" href="https://wa.me/998979700642" target="_blank" rel="noopener">Отправить заказ в WhatsApp</a>
+    </div>
+  </aside>
+</div>
+
+<script src="js/main.js" defer></script>
+</body>
+</html>
