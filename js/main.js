@@ -1,32 +1,11 @@
-/* KRASKO — набросок главной: перекраска стены, товары, корзина → WhatsApp, расчёт краски.
-   Появление блоков и сцены по прокрутке — в js/motion.js. */
+/* KRASKO — главная: интро, перекраска стены, «Топ продаж», расчёт краски.
+   Шапка, корзина и выбранный оттенок — в js/common.js. Появление блоков и сцены по прокрутке — в js/motion.js. */
 (function () {
   'use strict';
 
-  var WA = '998979700642';
-  var SITE = 'https://krasko.uz';
-  var FREE_FROM = 500000; // бесплатная доставка по Ташкенту, сум
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var $ = function (s, r) { return (r || document).querySelector(s); };
-  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-
-  /* Товары «Топ продаж»: названия, цены и фото с krasko.uz (22.11.2026) */
-  var GOODS = [
-    { id: 'alina-uni', brand: 'Alina Paint', name: 'Акриловая краска UNI, матовая', price: 34500, old: 37500, img: '/thumb/2/JdZ8oi4zt9GmnELyVjxeDw/350r350/d/kraska_akrilovaya_dlya_interera_alina_25_kg.png', url: '/magazin/product/akrilovaya-kraska-alina-paint-uni-matovaya' },
-    { id: 'polisan-perla', brand: 'Polisan', name: 'Краска интерьерная Perla Silikonlu Mat', price: 69966, old: 77740, img: '/thumb/2/0D24wWtEAmi5RVNx-qQTTg/350r350/d/polisan_kraska_interernaya.png', url: '/magazin/product/kraska-interernaya-polisan-perla-silikonlu-mat-matovaya-1' },
-    { id: 'marshall-sil', brand: 'Marshall', name: 'Краска интерьерная Siliconed Matt', price: 107640, old: 117000, img: '/thumb/2/ivdJ6doYcnklbEbvQZdmjA/350r350/d/kraska_silikonovaya_dlya_interera_marshall.png', url: '/magazin/product/kraska-silikonovaya-vodoemulsionnaya-marshall-siliconed-matt-matovyj-3' },
-    { id: 'mirage', brand: 'By Mirage', name: 'Краска акриловая, белая', price: 24960, old: 26000, img: '/thumb/2/Sz505vW0cF5e43rXiNClOg/350r350/d/akrilovaya_kraska_dlya_fasada.png', url: '/magazin/product/kraska-by-mirage-1' },
-    { id: 'polisan-q1', brand: 'Polisan', name: 'Акриловая краска Q1 Lux Plastik, матовая', price: 78000, old: 117000, img: '/thumb/2/BtUkRhmXEb3bt517Fmvu7A/350r350/d/kraska_akrilovaya_dlya_interera_polisan_q1.png', url: '/magazin/product/akrilovaya-kraska-polisan-q1-lux-plastik-matovaya-2' },
-    { id: 'polisan-primera', brand: 'Polisan', name: 'Краска силиконовая Primera Silikonlu Mat', price: 119600, old: 143000, img: '/thumb/2/Pl76p1ffREHmuAdPhH-ykA/350r350/d/kraska_milikonovaya_dlya_interera_polisan_sil.png', url: '/magazin/product/kraska-silikonovaya-polisan-primera-silikonlu-mat-matovaya' },
-    { id: 'marshall-tavan', brand: 'Marshall', name: 'Краска для потолка Tavan Boyasi, матовая', price: 167440, old: 182000, img: '/thumb/2/OjpWlYU1SWponk7JxfiXQQ/350r350/d/kraska_dlya_potolkov_marshall.png', url: '/magazin/product/kraska-dlya-potolka-marshall-tavan-boyasi-matovyj' },
-    { id: 'polisan-astar', brand: 'Polisan', name: 'Грунтовка Polizolan Astar', price: 99970, old: 0, img: '/thumb/2/1BvxBqARrUnGe81o2vf1LQ/350r350/d/gruntovka_glubokogo_proniknoveniya.png', url: '/magazin/product/gruntovka-polisan-polizolan-astar' }
-  ];
-  var byId = {};
-  GOODS.forEach(function (g) { byId[g.id] = g; });
-
-  var money = function (n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' сум'; };
-  var wa = function (text) { return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(text); };
-  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var KR = window.KR;
+  var $ = KR.$, $$ = KR.$$, money = KR.money, wa = KR.wa, esc = KR.esc, reduce = KR.reduce, tick = KR.tick;
+  var SITE = KR.SITE;
 
   /* ---------- интро ----------
      Фазы идут по окончанию анимаций, а не по таймеру: во вкладке в фоне интро ждёт,
@@ -83,21 +62,6 @@
     requestAnimationFrame(watch);
   })();
 
-  /* ---------- шапка и меню ---------- */
-  var head = $('#head');
-  var onScroll = function () { head.classList.toggle('is-stuck', window.scrollY > 8); };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  var burger = $('#burger'), nav = $('#nav');
-  var setNav = function (open) {
-    nav.classList.toggle('is-open', open);
-    burger.setAttribute('aria-expanded', String(open));
-    document.documentElement.style.overflow = open ? 'hidden' : '';
-  };
-  burger.addEventListener('click', function () { setNav(!nav.classList.contains('is-open')); });
-  nav.addEventListener('click', function (e) { if (e.target.closest('a')) setNav(false); });
-
   /* ---------- стена ---------- */
   var wall = $('#wall'), base = $('#wallBase');
   var BANDS = 14;
@@ -106,27 +70,17 @@
     for (var i = 0; i < BANDS; i++) s += '<i style="--i:' + i + '"></i>';
     return s;
   };
-  var inkFor = function (hex) {
-    var n = parseInt(hex.slice(1), 16);
-    var r = n >> 16, g = (n >> 8) & 255, b = n & 255;
-    return (r * 299 + g * 587 + b * 114) / 1000 > 150 ? '#17171B' : '#FFFFFF';
-  };
-  var state = { color: '#E3A72F', name: 'Шафран', code: 'K-1012' };
+  var state = KR.paint(); // оттенок, выбранный раньше (в том числе на странице каталога)
   var painting = null;
 
   var applyMeta = function () {
-    var root = document.documentElement.style;
-    root.setProperty('--paint', state.color);
-    root.setProperty('--paint-ink', inkFor(state.color));
+    KR.setPaint(state);
     $('#wallName').textContent = state.name;
     $('#wallCode').textContent = state.code;
     $('#calcName').textContent = state.name;
     $('#calcCode').textContent = state.code;
     updateCalc();
   };
-
-  // лёгкий отклик вибрацией на Android; только после настоящего касания, иначе браузер ругается в консоль
-  var tick = function () { if (navigator.vibrate && navigator.userActivation && navigator.userActivation.isActive) { try { navigator.vibrate(8); } catch (e) { /* не везде разрешено */ } } };
 
   // dir: 1 — слой идёт справа (как при загрузке), -1 — слева (смахнули вправо)
   var repaint = function (color, dir) {
@@ -150,6 +104,11 @@
   if (!reduce) base.classList.add('is-rolling'); // первый слой при загрузке
 
   var sws = $$('.sw');
+  sws.forEach(function (x) {
+    var on = x.dataset.color.toLowerCase() === state.color.toLowerCase();
+    x.classList.toggle('is-on', on);
+    x.setAttribute('aria-pressed', String(on));
+  });
   var chip = $('.wall__chip'), spot = $('.wall__spot');
   var pick = function (b, dir) {
     if (b.classList.contains('is-on')) return;
@@ -186,20 +145,34 @@
     else if (Math.abs(dx) < 8 && Math.abs(dy) < 8) stepColor(1);
   });
 
-  /* ---------- товары ---------- */
+  /* ---------- «Топ продаж» ----------
+     Те же восемь позиций, что в блоке «Топ продаж» на krasko.uz; цены и фото — из каталога (js/data.js). */
+  var TOP = [
+    'akrilovaya-kraska-alina-paint-uni-matovaya',
+    'kraska-interernaya-polisan-perla-silikonlu-mat-matovaya-1',
+    'kraska-silikonovaya-vodoemulsionnaya-marshall-siliconed-matt-matovyj-3',
+    'kraska-by-mirage-1',
+    'akrilovaya-kraska-polisan-q1-lux-plastik-matovaya-2',
+    'kraska-silikonovaya-polisan-primera-silikonlu-mat-matovaya',
+    'kraska-dlya-potolka-marshall-tavan-boyasi-matovyj',
+    'gruntovka-polisan-polizolan-astar'
+  ];
   var goodsEl = $('#goods');
-  goodsEl.innerHTML = GOODS.map(function (g) {
-    var off = g.old ? Math.round((1 - g.price / g.old) * 100) : 0;
-    return '<li><article class="good">' +
-      '<a class="good__pic" href="' + SITE + g.url + '" aria-label="' + esc(g.brand + ' ' + g.name) + '">' +
-        '<img src="' + SITE + g.img + '" alt="" loading="lazy" width="350" height="350" referrerpolicy="no-referrer">' +
+  goodsEl.innerHTML = TOP.map(function (slug) {
+    var hit = KR.bySlug[slug];
+    if (!hit) return '';
+    var p = hit.p, v = hit.v, off = KR.off(v);
+    var title = p.n + (v[1] ? ', ' + v[1] : '');
+    return '<li><article class="good" data-card>' +
+      '<a class="good__pic" href="catalog.html#p=' + p.id + '" aria-label="' + esc(title) + '">' +
+        '<img src="' + SITE + esc(p.i) + '" alt="" loading="lazy" width="350" height="350" referrerpolicy="no-referrer">' +
       '</a>' +
       '<div class="good__body">' +
-        '<span class="good__brand">' + esc(g.brand) + '</span>' +
-        '<h3 class="good__name">' + esc(g.name) + '</h3>' +
+        '<span class="good__brand">' + esc(p.b) + '</span>' +
+        '<h3 class="good__name">' + esc(title) + '</h3>' +
         '<div class="good__row">' +
-          '<p class="good__price"><b>' + money(g.price) + '</b>' + (g.old ? '<span class="good__was"><s>' + money(g.old) + '</s><i>−' + off + '%</i></span>' : '') + '</p>' +
-          '<button class="good__add" type="button" data-add="' + g.id + '" aria-label="Добавить в корзину: ' + esc(g.name) + '">' +
+          '<p class="good__price"><b>' + money(v[2]) + '</b>' + (off ? '<span class="good__was"><s>' + money(v[3]) + '</s><i>−' + off + '%</i></span>' : '') + '</p>' +
+          '<button class="good__add" type="button" data-add="' + v[0] + '" aria-label="Добавить в корзину: ' + esc(title) + '">' +
             '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' +
             '<span class="good__add-t" aria-hidden="true">В корзину</span>' +
           '</button>' +
@@ -213,141 +186,6 @@
     var max = goodsEl.scrollWidth - goodsEl.clientWidth;
     railThumb.style.transform = 'translateX(' + (max > 0 ? goodsEl.scrollLeft / max * 300 : 0).toFixed(1) + '%)';
   }, { passive: true });
-
-  /* ---------- корзина ---------- */
-  var KEY = 'krasko-cart';
-  var cart = {};
-  try { cart = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { cart = {}; }
-  Object.keys(cart).forEach(function (id) { if (!byId[id]) delete cart[id]; });
-  var save = function () { try { localStorage.setItem(KEY, JSON.stringify(cart)); } catch (e) { /* без хранилища корзина живёт до перезагрузки */ } };
-
-  var drawer = $('#drawer'), listEl = $('#cartList');
-  var lastFocus = null;
-
-  var renderCart = function (bump) {
-    var ids = Object.keys(cart), count = 0, sum = 0;
-    ids.forEach(function (id) { count += cart[id]; sum += cart[id] * byId[id].price; });
-    $$('[data-cart-count]').forEach(function (el) {
-      el.textContent = count;
-      el.hidden = !count;
-      if (bump && el.classList.contains('cartbtn__n')) { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
-    });
-    listEl.innerHTML = ids.map(function (id) {
-      var g = byId[id];
-      return '<li class="ci">' +
-        '<img src="' + SITE + g.img + '" alt="" width="64" height="64" referrerpolicy="no-referrer">' +
-        '<div><p class="ci__n">' + esc(g.brand + ' · ' + g.name) + '</p><p class="ci__p">' + money(g.price) + '</p></div>' +
-        '<div class="qty"><button type="button" data-dec="' + id + '" aria-label="Меньше">−</button><span>' + cart[id] + '</span><button type="button" data-inc="' + id + '" aria-label="Больше">+</button></div>' +
-      '</li>';
-    }).join('');
-    $('#cartEmpty').hidden = !!ids.length;
-    $('#cartFoot').hidden = !ids.length;
-    $('#cartSum').textContent = money(sum);
-    $('#cartFree').textContent = sum >= FREE_FROM
-      ? 'Доставка по Ташкенту бесплатно.'
-      : 'До бесплатной доставки по Ташкенту осталось ' + money(FREE_FROM - sum) + '.';
-    var lines = ids.map(function (id, i) { var g = byId[id]; return (i + 1) + '. ' + g.brand + ' ' + g.name + ' — ' + cart[id] + ' шт. × ' + money(g.price); });
-    $('#cartSend').href = wa('Здравствуйте! Хочу заказать:\n' + lines.join('\n') + '\nИтого: ' + money(sum));
-  };
-
-  var openCart = function () {
-    lastFocus = document.activeElement;
-    drawer.hidden = false;
-    void drawer.offsetWidth;
-    drawer.classList.add('is-open');
-    document.documentElement.style.overflow = 'hidden';
-    $('.drawer__x').focus();
-  };
-  var closeCart = function () {
-    drawer.classList.remove('is-open');
-    document.documentElement.style.overflow = '';
-    setTimeout(function () { drawer.hidden = true; }, reduce ? 0 : 400);
-    if (lastFocus) lastFocus.focus();
-  };
-
-  // фото товара летит в корзину: в шапку на компьютере, в нижнюю панель на телефоне
-  var fly = function (btn) {
-    if (reduce || !btn.animate) return;
-    var img = $('.good__pic img', btn.closest('.good'));
-    var target = $$('[data-cart-open]').filter(function (el) { return el.getClientRects().length; })[0];
-    if (!img || !target) return;
-    var a = img.getBoundingClientRect(), b = target.getBoundingClientRect();
-    var ghost = document.createElement('img');
-    ghost.src = img.currentSrc || img.src;
-    ghost.referrerPolicy = 'no-referrer';
-    ghost.alt = '';
-    ghost.className = 'fly';
-    ghost.style.cssText = 'left:' + a.left + 'px;top:' + a.top + 'px;width:' + a.width + 'px;height:' + a.height + 'px';
-    document.body.appendChild(ghost);
-    var dx = b.left + b.width / 2 - (a.left + a.width / 2);
-    var dy = b.top + b.height / 2 - (a.top + a.height / 2);
-    var lift = dy < 0 ? 40 : -70; // дуга: вверх летим с подъёмом, вниз — с подскоком
-    var anim = ghost.animate([
-      { transform: 'translate(0,0) scale(1)', opacity: 1 },
-      { transform: 'translate(' + dx * .45 + 'px,' + (dy * .35 + lift) + 'px) scale(.55)', opacity: 1, offset: .5 },
-      { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + (30 / a.width).toFixed(3) + ')', opacity: .25 }
-    ], { duration: 700, easing: 'cubic-bezier(.65,0,.35,1)' });
-    anim.onfinish = anim.oncancel = function () {
-      if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
-      target.animate([{ scale: 1 }, { scale: 1.14 }, { scale: 1 }], { duration: 320, easing: 'cubic-bezier(.22,1,.36,1)' });
-    };
-  };
-
-  document.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-add],[data-inc],[data-dec],[data-cart-open],[data-cart-close]');
-    if (!t) return;
-    if (t.dataset.add) {
-      fly(t); tick();
-      cart[t.dataset.add] = (cart[t.dataset.add] || 0) + 1;
-      t.classList.add('is-added');
-      setTimeout(function () { t.classList.remove('is-added'); }, 700);
-      save(); renderCart(true);
-    } else if (t.dataset.inc) {
-      cart[t.dataset.inc]++; save(); renderCart();
-    } else if (t.dataset.dec) {
-      if (--cart[t.dataset.dec] <= 0) delete cart[t.dataset.dec];
-      save(); renderCart();
-    } else if (t.hasAttribute('data-cart-open')) {
-      setNav(false); openCart();
-    } else {
-      closeCart();
-    }
-  });
-  // на телефоне корзина — шторка снизу: тянем за шапку вниз, чтобы закрыть
-  var panel = $('.drawer__panel'), shade = $('.drawer__shade'), dhead = $('.drawer__head');
-  var isSheet = window.matchMedia('(max-width: 860px)');
-  var pull = null;
-  dhead.addEventListener('pointerdown', function (e) {
-    if (!isSheet.matches || e.target.closest('button')) return;
-    pull = { y: e.clientY, t: e.timeStamp, dy: 0 };
-    dhead.setPointerCapture(e.pointerId);
-    panel.style.transition = 'none';
-    shade.style.transition = 'none';
-  });
-  dhead.addEventListener('pointermove', function (e) {
-    if (!pull) return;
-    pull.dy = Math.max(0, e.clientY - pull.y);
-    panel.style.transform = 'translateY(' + pull.dy + 'px)';
-    shade.style.opacity = String(1 - Math.min(1, pull.dy / panel.offsetHeight));
-  });
-  var endPull = function (e) {
-    if (!pull) return;
-    var speed = pull.dy / Math.max(1, e.timeStamp - pull.t);
-    var shut = pull.dy > 110 || (speed > .5 && pull.dy > 30);
-    pull = null;
-    void panel.offsetWidth; // фиксируем положение под пальцем, дальше доведёт переход
-    panel.style.transition = ''; shade.style.transition = '';
-    panel.style.transform = ''; shade.style.opacity = '';
-    if (shut) closeCart();
-  };
-  dhead.addEventListener('pointerup', endPull);
-  dhead.addEventListener('pointercancel', endPull);
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Escape') return;
-    if (!drawer.hidden) closeCart();
-    else if (nav.classList.contains('is-open')) setNav(false);
-  });
 
   /* ---------- расчёт краски ---------- */
   var area = $('#area'), areaNum = $('#areaNum');
@@ -370,5 +208,4 @@
   $$('input[name="layers"], input[name="surface"]').forEach(function (r) { r.addEventListener('change', updateCalc); });
 
   applyMeta();
-  renderCart();
 })();
