@@ -7,9 +7,24 @@
   var SITE = 'https://krasko.uz'; // фото пока грузятся с действующего сайта клиента
   var FREE_FROM = 500000; // бесплатная доставка по Ташкенту, сум
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- язык ----------
+     Русский — основной. На узбекских страницах (<html lang="uz">) подключён js/ui.uz.js со словарём KR_UI:
+     t() заменяет в строке все русские фразы из словаря, начиная с самых длинных. */
+  var LANG = document.documentElement.lang === 'uz' ? 'uz' : 'ru';
+  var UI = (LANG === 'uz' && window.KR_UI) || null;
+  var uiKeys = UI ? Object.keys(UI).sort(function (a, b) { return b.length - a.length; }) : [];
+  var tCache = {};
+  var t = function (s) {
+    if (!UI) return s;
+    if (tCache[s] !== undefined) return tCache[s];
+    var out = s;
+    uiKeys.forEach(function (k) { if (out.indexOf(k) >= 0) out = out.split(k).join(UI[k]); });
+    return (tCache[s] = out);
+  };
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-  var money = function (n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' сум'; };
+  var money = function (n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + t(' сум'); };
   var wa = function (text) { return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(text); };
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var store = {
@@ -21,6 +36,18 @@
 
   /* ---------- каталог: поиск товара и фасовки по номеру фасовки ---------- */
   var DATA = window.KR_DATA || { cats: [], items: [] };
+  // пути: ROOT — корень языковой версии (ссылки на страницы), ASSET — корень сайта (данные)
+  var ROOT = new URL(window.KR_ROOT || '.', location.href).pathname;
+  var ASSET = new URL(window.KR_ASSET || window.KR_ROOT || '.', location.href).pathname;
+
+  // переключатель языка ведёт на ту же страницу в другой версии
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('.lang');
+    if (!a) return;
+    e.preventDefault();
+    var rest = location.pathname.indexOf(ROOT) === 0 ? location.pathname.slice(ROOT.length) : '';
+    location.href = ASSET + (LANG === 'uz' ? '' : 'uz/') + rest + location.search + location.hash;
+  });
   var byKind = {}, bySlug = {};
   DATA.items.forEach(function (p) {
     p.v.forEach(function (v) { byKind[v[0]] = { p: p, v: v }; bySlug[v[4]] = { p: p, v: v }; });
@@ -34,7 +61,7 @@
     return (r * 299 + g * 587 + b * 114) / 1000 > 150 ? '#17171B' : '#FFFFFF';
   };
   var paint = store.get('krasko-paint', null);
-  if (!paint || !/^#[0-9A-F]{6}$/i.test(paint.color || '')) paint = { color: '#E3A72F', name: 'Шафран', code: 'K-1012' };
+  if (!paint || !/^#[0-9A-F]{6}$/i.test(paint.color || '')) paint = { color: '#E3A72F', name: t('Шафран'), code: 'K-1012' };
   var setPaint = function (p) {
     paint = p;
     var root = document.documentElement.style;
@@ -86,17 +113,17 @@
       return '<li class="ci">' +
         '<img src="' + SITE + esc(g.i) + '" alt="" width="64" height="64" loading="lazy" referrerpolicy="no-referrer">' +
         '<div><p class="ci__n">' + esc(g.n) + '</p><p class="ci__p">' + (g.k ? esc(g.k) + ' · ' : '') + money(g.p) + '</p></div>' +
-        '<div class="qty"><button type="button" data-dec="' + id + '" aria-label="Меньше">−</button><span>' + g.q + '</span><button type="button" data-inc="' + id + '" aria-label="Больше">+</button></div>' +
+        '<div class="qty"><button type="button" data-dec="' + id + t('" aria-label="Меньше">−</button><span>') + g.q + '</span><button type="button" data-inc="' + id + t('" aria-label="Больше">+</button></div>') +
       '</li>';
     }).join('');
     $('#cartEmpty').hidden = !!ids.length;
     $('#cartFoot').hidden = !ids.length;
     $('#cartSum').textContent = money(sum);
     $('#cartFree').textContent = sum >= FREE_FROM
-      ? 'Доставка по Ташкенту бесплатно.'
-      : 'До бесплатной доставки по Ташкенту осталось ' + money(FREE_FROM - sum) + '.';
-    var lines = ids.map(function (id, i) { var g = cart[id]; return (i + 1) + '. ' + g.n + (g.k ? ', ' + g.k : '') + ' — ' + g.q + ' шт. × ' + money(g.p); });
-    $('#cartSend').href = wa('Здравствуйте! Хочу заказать:\n' + lines.join('\n') + '\nИтого: ' + money(sum));
+      ? t('Доставка по Ташкенту бесплатно.')
+      : t('До бесплатной доставки по Ташкенту осталось {0}.').replace('{0}', money(FREE_FROM - sum));
+    var lines = ids.map(function (id, i) { var g = cart[id]; return (i + 1) + '. ' + g.n + (g.k ? ', ' + g.k : '') + ' — ' + g.q + t(' шт. × ') + money(g.p); });
+    $('#cartSend').href = wa(t('Здравствуйте! Хочу заказать:\n') + lines.join('\n') + t('\nИтого: ') + money(sum));
     document.dispatchEvent(new Event('cart:change'));
   };
 
@@ -218,7 +245,7 @@
   renderCart();
 
   window.KR = {
-    WA: WA, SITE: SITE, DATA: DATA, ROOT: window.KR_ROOT || '', // ROOT — путь к корню сайта с вложенных страниц
+    WA: WA, SITE: SITE, DATA: DATA, ROOT: ROOT, ASSET: ASSET, LANG: LANG, t: t, // ROOT — путь к корню сайта с вложенных страниц
     reduce: reduce, isSheet: isSheet,
     $: $, $$: $$, money: money, wa: wa, esc: esc, off: off, tick: tick, store: store,
     byKind: byKind, bySlug: bySlug,

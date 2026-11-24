@@ -5,7 +5,7 @@
 
   var KR = window.KR;
   var $ = KR.$, $$ = KR.$$, money = KR.money, wa = KR.wa, esc = KR.esc, reduce = KR.reduce, tick = KR.tick;
-  var SITE = KR.SITE;
+  var SITE = KR.SITE, t = KR.t;
 
   /* ---------- интро ----------
      Фазы идут по окончанию анимаций, а не по таймеру: во вкладке в фоне интро ждёт,
@@ -108,6 +108,8 @@
     var on = x.dataset.color.toLowerCase() === state.color.toLowerCase();
     x.classList.toggle('is-on', on);
     x.setAttribute('aria-pressed', String(on));
+    // название оттенка берём с образца: оно на языке страницы
+    if (on) state = { color: x.dataset.color, name: x.dataset.name, code: x.dataset.code };
   });
   var chip = $('.wall__chip'), spot = $('.wall__spot');
   var pick = function (b, dir) {
@@ -172,9 +174,9 @@
         '<h3 class="good__name">' + esc(title) + '</h3>' +
         '<div class="good__row">' +
           '<p class="good__price"><b>' + money(v[2]) + '</b>' + (off ? '<span class="good__was"><s>' + money(v[3]) + '</s><i>−' + off + '%</i></span>' : '') + '</p>' +
-          '<button class="good__add" type="button" data-add="' + v[0] + '" aria-label="Добавить в корзину: ' + esc(title) + '">' +
+          '<button class="good__add" type="button" data-add="' + v[0] + t('" aria-label="Добавить в корзину: ') + esc(title) + '">' +
             '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' +
-            '<span class="good__add-t" aria-hidden="true">В корзину</span>' +
+            t('<span class="good__add-t" aria-hidden="true">В корзину</span>') +
           '</button>' +
         '</div>' +
       '</div>' +
@@ -198,9 +200,9 @@
     area.style.setProperty('--fill', ((a - 5) / 295 * 100) + '%');
     // чем больше литров, тем выше уровень краски в образце (не ниже половины: там подпись оттенка)
     $('#calcLvl').style.transform = 'translateY(' + (50 - 50 * Math.min(1, litres / 60)).toFixed(1) + '%)';
-    var surf = cover === 10 ? 'гладкая' : 'фактурная';
-    $('#calcWa').href = wa('Здравствуйте! Расчёт с сайта: стены ' + a + ' м², слоёв: ' + layers + ', поверхность ' + surf + '. Нужно примерно ' + litres + ' л краски. Оттенок: ' + state.name + '. Подскажите, что выбрать?');
-    $('#calcSmeta').href = wa('Здравствуйте! Нужен выезд специалиста на объект для сметы. Площадь стен около ' + a + ' м².');
+    var surf = cover === 10 ? t('гладкая') : t('фактурная');
+    $('#calcWa').href = wa(t('Здравствуйте! Расчёт с сайта: стены ') + a + t(' м², слоёв: ') + layers + t(', поверхность ') + surf + t('. Нужно примерно ') + litres + t(' л краски. Оттенок: ') + state.name + t('. Подскажите, что выбрать?'));
+    $('#calcSmeta').href = wa(t('Здравствуйте! Нужен выезд специалиста на объект для сметы. Площадь стен около ') + a + t(' м².'));
   }
   area.addEventListener('input', function () { areaNum.value = area.value; updateCalc(); });
   areaNum.addEventListener('input', function () { if (areaNum.value) { area.value = areaNum.value; updateCalc(); } });

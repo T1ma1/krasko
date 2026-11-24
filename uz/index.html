@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KRASKO — Toshkentda ta'mirlash uchun bo'yoq va materiallar</title>
+<meta name="description" content="Toshkentdagi KRASKO qurilish do'koni: bo'yoqlar, gruntlar, emallar, asboblar. Joyida 10 000 xil rangga kolerlash, buyurtma kuni yetkazib berish.">
+<meta name="robots" content="noindex, nofollow"><!-- демо для клиента: убрать при запуске на боевом домене -->
+<link rel="alternate" hreflang="ru" href="https://krasko.uz/">
+<link rel="alternate" hreflang="uz" href="https://krasko.uz/uz/">
+<meta name="theme-color" content="#F3F0E9">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/unbounded-cyrillic-cb504d.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/onest-normal-300-700-cyrillic-d1abf1.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://krasko.uz/d/454542_3090.png" as="image" referrerpolicy="no-referrer">
+<script>
+/* интро показываем сразу, до загрузки основного скрипта; при «уменьшить движение» его нет */
+document.documentElement.className += ' js'; window.KR_ROOT = './'; window.KR_ASSET = '../';
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.className += ' has-intro intro-on';
+</script>
+<link rel="stylesheet" href="../css/fonts.css">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/motion.css">
+</head>
+<body>
+<!-- интро: валик из логотипа выкрашивает слово, экран заливается красным, краска сходит -->
+<div class="intro" id="intro" data-phase="wait" aria-hidden="true">
+  <div class="intro__mark">
+    <img class="intro__word" src="https://krasko.uz/d/454542_3090.png" alt="" referrerpolicy="no-referrer">
+    <img class="intro__roll" src="https://krasko.uz/d/454542_3090.png" alt="" referrerpolicy="no-referrer">
+  </div>
+  <div class="intro__coat"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <img class="intro__white" src="https://krasko.uz/d/454542_3090.png" alt="" referrerpolicy="no-referrer">
+</div>
+
+<a class="skip" href="#main">Asosiy qismga o'tish</a>
+
+<header class="head" id="head">
+  <div class="wrap head__in">
+    <a class="logo" href="#top" aria-label="KRASKO, bosh sahifaga">
+      <img src="https://krasko.uz/d/454542_3090.png" alt="KRASKO" width="756" height="224" referrerpolicy="no-referrer">
+    </a>
+    <nav class="nav" id="nav" aria-label="Sayt bo'limlari">
+      <a href="catalog.html">Katalog</a>
+      <a href="#top-sales">Eng ko'p sotilganlar</a>
+      <a href="#club">Klub kartasi</a>
+      <a href="#calc">Bo'yoq hisobi</a>
+      <a href="#delivery">Yetkazib berish</a>
+      <a href="#contacts">Aloqa</a>
+      <div class="nav__foot">
+        <a class="nav__tel" href="tel:+998979700642">+998 97 970-06-42</a>
+        <p>Toshkent, Parkent ko'chasi, 74 · har kuni 9:00–18:00</p>
+        <a class="nav__wa" href="https://wa.me/998979700642" target="_blank" rel="noopener">WhatsApp orqali yozish</a>
+      </div>
+      <div class="nav__coat" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </nav>
+    <div class="head__side">
+      <a class="lang" href="../index.html" hreflang="ru" lang="ru" aria-label="Русская версия">RU</a>
+      <a class="head__tel" href="tel:+998979700642">+998 97 970-06-42</a>
+      <button class="cartbtn" type="button" data-cart-open aria-label="Savatni ochish">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 4h2.4l2.1 10.2a1.5 1.5 0 0 0 1.5 1.2h8.2a1.5 1.5 0 0 0 1.5-1.2L20 7.5H6.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="19.5" r="1.4" fill="currentColor"/><circle cx="17" cy="19.5" r="1.4" fill="currentColor"/></svg>
+        <span class="cartbtn__n" data-cart-count hidden>0</span>
+      </button>
+      <button class="burger" type="button" id="burger" aria-controls="nav" aria-expanded="false" aria-label="Menyu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <i class="head__prog" id="prog" aria-hidden="true"></i>
+</header>
+
+<main id="main">
+
+<!-- ============ ПЕРВЫЙ ЭКРАН: стена, которую можно перекрасить ============ -->
+<section class="hero" id="top">
+  <div class="wrap hero__in">
+    <div class="hero__text">
+      <p class="eyebrow">Qurilish do'koni · Toshkent · 1999-yildan beri</p>
+      <h1 class="hero__h">
+        <span class="line"><span>Toshkentda</span></span>
+        <span class="line"><span>ta'mirlash uchun</span></span>
+        <span class="line"><span>bo'yoqlar</span></span>
+      </h1>
+      <p class="hero__lead">Ko'z oldingizda 10 000 xil rangdan istalganiga kolerlaymiz va buyurtma kuni yetkazib beramiz. Katalogda 1 000 dan ortiq mahsulot: bo'yoqlar, gruntlar, emallar va asboblar.</p>
+      <div class="hero__cta">
+        <a class="btn btn--main" href="catalog.html">Katalogni ochish</a>
+        <a class="btn btn--ghost" href="#calc">Bo'yoqni hisoblash</a>
+      </div>
+      <div class="try">
+        <p class="try__label">Rangni devorda sinab ko'ring<span class="try__touch">: namunani bosing yoki devor bo'ylab suring</span></p>
+        <div class="try__row" role="group" aria-label="Rang tanlash">
+          <button type="button" class="sw is-on" style="--c:#E3A72F" data-color="#E3A72F" data-name="Zafaron" data-code="K-1012" aria-pressed="true"><span class="sr">Zafaron</span></button>
+          <button type="button" class="sw" style="--c:#B9502F" data-color="#B9502F" data-name="Loy" data-code="K-2040" aria-pressed="false"><span class="sr">Loy</span></button>
+          <button type="button" class="sw" style="--c:#8F1D2C" data-color="#8F1D2C" data-name="Anor" data-code="K-3027" aria-pressed="false"><span class="sr">Anor</span></button>
+          <button type="button" class="sw" style="--c:#9BAF7C" data-color="#9BAF7C" data-name="Pista" data-code="K-6021" aria-pressed="false"><span class="sr">Pista</span></button>
+          <button type="button" class="sw" style="--c:#2B7FA6" data-color="#2B7FA6" data-name="Moviy" data-code="K-5015" aria-pressed="false"><span class="sr">Moviy</span></button>
+          <button type="button" class="sw" style="--c:#243463" data-color="#243463" data-name="Indigo" data-code="K-5003" aria-pressed="false"><span class="sr">Indigo</span></button>
+          <button type="button" class="sw" style="--c:#E9E2D3" data-color="#E9E2D3" data-name="Paxta" data-code="K-9001" aria-pressed="false"><span class="sr">Paxta</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wall" id="wall" aria-hidden="true">
+    <div class="wall__coat wall__coat--base" id="wallBase"></div>
+    <div class="wall__chip">
+      <span class="wall__code" id="wallCode">K-1012</span>
+      <span class="wall__name" id="wallName">Zafaron</span>
+      <span class="wall__note">10 000 rangdan biri</span>
+    </div>
+    <span class="wall__hint">Qayta bo'yash uchun suring</span>
+    <div class="wall__spot">
+      <img class="wall__can" src="https://krasko.uz/thumb/2/o7oesb83A1sgmjMhkuZA2w/400r400/d/1_kraski_dlya_vnutrennih_rabot-photoroom.webp" alt="" width="266" height="400" referrerpolicy="no-referrer">
+    </div>
+  </div>
+</section>
+
+<!-- ============ СЕРВИС ============ -->
+<section class="facts" aria-labelledby="facts-h">
+  <div class="wrap">
+    <h2 class="h2" id="facts-h" data-h="roll">Kolerlash, yetkazib berish, qaytarish</h2>
+    <ul class="facts__grid">
+      <li class="fact">
+        <b class="fact__n"><span data-count="10000">10 000</span></b>
+        <span class="fact__t">xil rang</span>
+        <p>O'z uskunamizda, to'g'ridan-to'g'ri do'konda kolerlaymiz.</p>
+      </li>
+      <li class="fact">
+        <b class="fact__n">2–3 <small>soat</small></b>
+        <span class="fact__t">ekspress yetkazib berish</span>
+        <p>Mahsulot omborda bo'lsa, Toshkent bo'ylab oddiy yetkazib berish buyurtma kuni.</p>
+      </li>
+      <li class="fact">
+        <b class="fact__n">0 <small>so'm</small></b>
+        <span class="fact__t">500 000 so'mdan yetkazib berish</span>
+        <p>Toshkent bo'ylab. Kichikroq buyurtmalar uchun yetkazib berish 45 000 so'mdan.</p>
+      </li>
+      <li class="fact">
+        <b class="fact__n"><span data-count="14">14</span> <small>kun</small></b>
+        <span class="fact__t">almashtirish va qaytarish uchun</span>
+        <p>Agar qadoq ochilmagan bo'lsa. Mahsulotlar rasmiy, ishlab chiqaruvchi kafolati bilan.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ КАТАЛОГ ============ -->
+<section class="cat" id="catalog" aria-labelledby="cat-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="h2" id="cat-h" data-h="rise">Katalog</h2>
+      <p class="sec-head__note">11 bo'limda 1 000 dan ortiq mahsulot. Asosiy assortiment doim Toshkentdagi omborda.</p>
+    </div>
+    <ul class="cat__grid">
+      <li><a class="tile tile--wide" href="magazin/folder/kraski-dlya-vnutrennih-rabot/">
+        <span class="tile__n">Ichki ishlar uchun bo'yoqlar</span>
+        <span class="tile__d">Devor va shiftlar, oshxona va hammom, bolalar xonasi uchun. Dekorativ suvoqlar va kolerlar.</span>
+        <img src="https://krasko.uz/thumb/2/o7oesb83A1sgmjMhkuZA2w/400r400/d/1_kraski_dlya_vnutrennih_rabot-photoroom.webp" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile tile--wide" href="magazin/folder/kraski-dlya-fasadnyh-rabot/">
+        <span class="tile__n">Fasad ishlari uchun bo'yoqlar</span>
+        <span class="tile__d">Fasad bo'yoqlari va suvoqlari, laklar va shimdirgichlar, metall va yo'l chiziqlari uchun bo'yoqlar.</span>
+        <img src="https://krasko.uz/thumb/2/1CCuUru9-mvcH0acp7NoNA/400r400/d/2_kraski_dlya_fasadnyh_rabot-photoroom.webp" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="magazin/folder/instrumenty-dlya-pokraski/">
+        <span class="tile__n">Bo'yash asboblari</span>
+        <img src="https://krasko.uz/thumb/2/OdLmMcJRAgrWgZMUbXziAQ/400r400/d/3_instrumenty_dlya_pokraski-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="magazin/folder/emali-1/">
+        <span class="tile__n">Emallar</span>
+        <img src="https://krasko.uz/thumb/2/lx5Xr7X72uOUNzW03WlrvA/400r400/d/4_emali-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="magazin/folder/pokrytiya-dlya-dereva/">
+        <span class="tile__n">Yog'och uchun qoplamalar</span>
+        <img src="https://krasko.uz/thumb/2/kbsiTL2MCZl6MgsG_5-A_g/400r400/d/5_pokrytiya_dlya_dereva-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile tile--dark" href="magazin/folder/podgotovka-poverhnosti-k-pokraske-i-shtukaturke/">
+        <span class="tile__n">Gruntovkalar va shpaklyovkalar</span>
+        <img src="https://krasko.uz/thumb/2/VwITM0gN5Pn4ePgPS9DXow/400r400/d/undefined_1.webp" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="magazin/folder/peny-germetiki-i-uplotniteli/">
+        <span class="tile__n">Ko'piklar va germetiklar</span>
+        <img src="https://krasko.uz/thumb/2/t2oMzKZyx-HCZSMlC1nJGA/400r400/d/6_peny_germetiki_i_uplotniteli-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="magazin/folder/klei-1/">
+        <span class="tile__n">Yelimlar</span>
+        <img src="https://krasko.uz/thumb/2/CX8iV2UZ18-groQN32jdzw/400r400/d/7_klei-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="magazin/folder/malyarnye-i-upakovochnye-lenty/">
+        <span class="tile__n">Malyar lentalari</span>
+        <img src="https://krasko.uz/thumb/2/xonwXpS1JIZJ925KG1V6xg/400r400/d/8_malyarnye_i_upakovochnye_lenty-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="magazin/folder/okrasochnye-apparaty/">
+        <span class="tile__n">Bo'yash apparatlari</span>
+        <img src="https://krasko.uz/thumb/2/Ts6olcLBXYt9vlLdTBTn3Q/400r400/d/10_okrasochnye_apparaty-photoroom.png" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile" href="magazin/folder/instrumenty-1/">
+        <span class="tile__n">Usta asboblari</span>
+        <img src="https://krasko.uz/thumb/2/ZMwkwqxMD47Mq09wYxnICA/400r400/d/11_proyavochnye_instrument-photoroom.webp" alt="" loading="lazy" width="266" height="400" referrerpolicy="no-referrer">
+      </a></li>
+      <li><a class="tile tile--all" href="catalog.html">
+        <span class="tile__n">Butun katalog</span>
+        <span class="tile__arrow" aria-hidden="true">→</span>
+      </a></li>
+    </ul>
+    <p class="brands__l">Mavjud brendlar</p>
+    <p class="sr">Marshall, Polisan, Alina Paint, Dulux, Knauf, Danogips, Aspro, Collex, Sandeco, Graco, Storch</p>
+  </div>
+  <div class="mq" aria-hidden="true"><div class="mq__t"><span>Marshall</span><span>Polisan</span><span>Alina Paint</span><span>Dulux</span><span>Knauf</span><span>Danogips</span><span>Aspro</span><span>Collex</span><span>Sandeco</span><span>Graco</span><span>Storch</span><span>Marshall</span><span>Polisan</span><span>Alina Paint</span><span>Dulux</span><span>Knauf</span><span>Danogips</span><span>Aspro</span><span>Collex</span><span>Sandeco</span><span>Graco</span><span>Storch</span></div></div>
+</section>
+
+<!-- ============ ТОП ПРОДАЖ ============ -->
+<section class="top" id="top-sales" aria-labelledby="top-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="h2" id="top-h" data-h="drip">Eng ko'p sotilganlar</h2>
+      <p class="sec-head__note">Eng ko'p olinadigan bo'yoqlar. Narxlar so'mda.</p>
+    </div>
+    <ul class="goods" id="goods"></ul>
+    <div class="rail" id="rail" aria-hidden="true"><i></i></div>
+  </div>
+</section>
+
+<!-- ============ КЛУБНАЯ КАРТА ============ -->
+<section class="club" id="club" aria-labelledby="club-h">
+  <div class="roller" id="roller" aria-hidden="true"><div class="roller__arm"></div><div class="roller__drum"></div></div>
+  <div class="wrap club__in">
+    <div class="club__text">
+      <h2 class="h2" id="club-h" data-h="rise">KRASKO klub kartasi</h2>
+      <p class="club__lead">Karta bilan mahsulotlarni tannarxida, ustamasiz sotib olasiz. Chegirmalar 25% dan 65% gacha.</p>
+      <a class="btn btn--light" href="https://wa.me/998979700642?text=Assalomu%20alaykum!%20KRASKO%20klub%20kartasini%20rasmiylashtirmoqchiman." target="_blank" rel="noopener">Kartani WhatsApp orqali rasmiylashtirish</a>
+      <p class="club__low"><b>Arzonroq narx topdingizmi?</b> Yana chegirma beramiz.</p>
+    </div>
+    <div class="club__card" aria-hidden="true">
+      <div class="card card--back"></div>
+      <div class="card card--front">
+        <span class="card__brand">KRASKO</span>
+        <span class="card__kind">Klub kartasi</span>
+        <span class="card__off">−25…65%</span>
+        <span class="card__num">0000 1999 2026</span>
+        <i class="card__glare"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ РАСЧЁТ КРАСКИ ============ -->
+<section class="calc" id="calc" aria-labelledby="calc-h">
+  <div class="wrap calc__in">
+    <div class="calc__form">
+      <h2 class="h2" id="calc-h" data-h="roll">Qancha bo'yoq olish kerak</h2>
+      <p class="calc__lead">Maydon va qatlamlar sonini kiriting. Hajmini hisoblaymiz, siz esa hisobni sotuvchiga yuborasiz.</p>
+
+      <label class="field">
+        <span class="field__l">Devorlar maydoni, m²</span>
+        <span class="field__row">
+          <input type="range" id="area" min="5" max="300" step="1" value="45" aria-label="Devorlar maydoni, kvadrat metr">
+          <input type="number" id="areaNum" min="5" max="300" step="1" value="45" inputmode="numeric" aria-label="Devorlar maydoni raqamda">
+        </span>
+      </label>
+
+      <fieldset class="field">
+        <legend class="field__l">Qatlamlar</legend>
+        <div class="seg" id="layers">
+          <label><input type="radio" name="layers" value="1"><span>1</span></label>
+          <label><input type="radio" name="layers" value="2" checked><span>2</span></label>
+          <label><input type="radio" name="layers" value="3"><span>3</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend class="field__l">Yuza</legend>
+        <div class="seg seg--text" id="surface">
+          <label><input type="radio" name="surface" value="10" checked><span>Silliq</span></label>
+          <label><input type="radio" name="surface" value="7"><span>Fakturali</span></label>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="calc__out">
+      <div class="calc__swatch">
+        <i class="calc__lvl" id="calcLvl" aria-hidden="true"><svg viewBox="0 0 200 20" preserveAspectRatio="none"><path d="M0 10 Q25 0 50 10 T100 10 T150 10 T200 10 V20 H0Z"/></svg></i>
+        <span class="calc__code" id="calcCode">K-1012</span>
+        <span class="calc__name" id="calcName">Zafaron</span>
+      </div>
+      <p class="calc__res"><span class="calc__approx">taxminan</span> <b id="litres">9</b> <span>l bo'yoq</span></p>
+      <p class="calc__hint">Hisob taxminiy: sarf bo'yoq va asosga bog'liq, aniq raqam idishda yozilgan. Katta obyektga mutaxassis o'zi kelib, smeta tuzadi.</p>
+      <div class="calc__cta">
+        <a class="btn btn--main" id="calcWa" href="https://wa.me/998979700642" target="_blank" rel="noopener">Hisobni WhatsApp orqali yuborish</a>
+        <a class="btn btn--ghost" id="calcSmeta" href="https://wa.me/998979700642" target="_blank" rel="noopener">Mutaxassis chaqirish</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ДОСТАВКА И ОПЛАТА ============ -->
+<section class="dlv" id="delivery" aria-labelledby="dlv-h">
+  <div class="wrap">
+    <h2 class="h2" id="dlv-h" data-h="rise">Yetkazib berish va to'lov</h2>
+    <div class="dlv__grid">
+      <dl class="dlist">
+        <div><dt>Toshkent bo'ylab</dt><dd>Buyurtma kuni, 9:00 dan 18:00 gacha. 45 000 so'mdan, 500 000 so'mdan yuqori buyurtmada bepul.</dd></div>
+        <div><dt>Ekspress</dt><dd>Mahsulot omborda bo'lsa, 2–3 soatda.</dd></div>
+        <div><dt>Toshkent viloyatiga</dt><dd>100 000 so'mdan, masofa va hajmga qarab hisoblaymiz. Yirik buyurtmalarni yuk transportida yetkazamiz.</dd></div>
+        <div><dt>O'zingiz olib ketish</dt><dd>Buyurtma kuni Parkent ko'chasidagi do'kondan.</dd></div>
+      </dl>
+      <dl class="dlist">
+        <div><dt>Do'konda</dt><dd>Naqd pul, karta, QR-kod yoki Click.</dd></div>
+        <div><dt>Yetkazib berish bilan</dt><dd>Mahsulot to'liq to'lanadi, viloyat bo'ylab yetkazib berish alohida to'lanadi.</dd></div>
+        <div><dt>Yuridik shaxslarga</dt><dd>Hisob raqamiga pul o'tkazish. Hisobni Didox orqali, pochtaga yoki Telegramga yuboramiz.</dd></div>
+        <div><dt>Ulgurji va chakana</dt><dd>Qurilish kompaniyalari, prorablar va dizaynerlar uchun maxsus shartlar amal qiladi.</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ============ КОНТАКТЫ ============ -->
+<section class="cont" id="contacts" aria-labelledby="cont-h">
+  <div class="wrap cont__in">
+    <div>
+      <h2 class="h2" id="cont-h" data-h="roll">Parkent ko'chasidagi do'kon</h2>
+      <p class="cont__addr">Toshkent, Yashnobod tumani,<br>Parkent ko'chasi, 74, 3–4-blok</p>
+      <p class="cont__hours">Har kuni 9:00 dan 18:00 gacha</p>
+    </div>
+    <div class="cont__act">
+      <a class="cont__tel" href="tel:+998979700642">+998 97 970-06-42</a>
+      <div class="cont__btns">
+        <a class="btn btn--main" href="https://wa.me/998979700642" target="_blank" rel="noopener">WhatsApp orqali yozish</a>
+        <a class="btn btn--ghost" href="https://t.me/krasko_uz" target="_blank" rel="noopener">Telegramni ochish</a>
+        <a class="btn btn--ghost" href="https://yandex.uz/maps/?text=%D0%A2%D0%B0%D1%88%D0%BA%D0%B5%D0%BD%D1%82%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%9F%D0%B0%D1%80%D0%BA%D0%B5%D0%BD%D1%82%2C%2074" target="_blank" rel="noopener">Yo'nalish tuzish</a>
+      </div>
+      <a class="cont__mail" href="mailto:krasko.zakaz@gmail.com">krasko.zakaz@gmail.com</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap"><div class="foot__big" id="footBig" aria-hidden="true"><span class="foot__big-o">KRASKO</span><span class="foot__big-f">KRASKO</span></div></div>
+  <div class="wrap foot__in">
+    <span class="foot__word">KRASKO</span>
+    <p class="foot__copy">© 1999–2026 KRASKO. Toshkentdagi qurilish do'koni.</p>
+    <a class="foot__ig" href="https://www.instagram.com/krasko_tashkent" target="_blank" rel="noopener">Instagram</a>
+  </div>
+</footer>
+
+<!-- нижняя панель на телефоне -->
+<nav class="mbar" aria-label="Tezkor amallar">
+  <a href="tel:+998979700642"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.700a2 2 0 0 1 2-2.200Z"/></svg>Qo'ng'iroq</a>
+  <a href="https://wa.me/998979700642" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.300-4.200A8 8 0 1 1 8.300 19L4 20Z"/><path d="M9.200 9.300c.300 2.400 2.100 4.300 4.500 4.900"/></svg>WhatsApp</a>
+  <button type="button" data-cart-open><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.400l2.100 10.200a1.500 1.500 0 0 0 1.500 1.200h8.200a1.500 1.500 0 0 0 1.500-1.200L20 7.500H6.200"/><circle cx="9.500" cy="19.500" r="1.200"/><circle cx="17" cy="19.500" r="1.200"/></svg>Savat <span data-cart-count hidden>0</span></button>
+</nav>
+
+<!-- корзина -->
+<div class="drawer" id="drawer" hidden>
+  <div class="drawer__shade" data-cart-close></div>
+  <aside class="drawer__panel" role="dialog" aria-modal="true" aria-labelledby="drawer-h">
+    <div class="drawer__head">
+      <h2 id="drawer-h">Savat</h2>
+      <button type="button" class="drawer__x" data-cart-close aria-label="Savatni yopish">×</button>
+    </div>
+    <ul class="drawer__list" id="cartList"></ul>
+    <p class="drawer__empty" id="cartEmpty">Savat bo'sh. Katalogdan mahsulot qo'shing.</p>
+    <div class="drawer__foot" id="cartFoot" hidden>
+      <p class="drawer__sum"><span>Jami</span><b id="cartSum">0 so'm</b></p>
+      <p class="drawer__free" id="cartFree"></p>
+      <a class="btn btn--main" id="cartSend" href="https://wa.me/998979700642" target="_blank" rel="noopener">Buyurtmani WhatsApp orqali yuborish</a>
+    </div>
+  </aside>
+</div>
+
+<script src="../js/data.uz.js" defer></script>
+<script src="../js/ui.uz.js" defer></script>
+<script src="../js/common.js" defer></script>
+<script src="../js/main.js" defer></script>
+<script src="../js/motion.js" defer></script>
+</body>
+</html>

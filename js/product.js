@@ -1,7 +1,7 @@
 /* KRASKO — страница товара: листание фото и количество. Корзина — в js/common.js. */
 (function () {
   'use strict';
-  var KR = window.KR, $ = KR.$, $$ = KR.$$;
+  var KR = window.KR, $ = KR.$, $$ = KR.$$, t = KR.t;
   var main = $('#ppMain');
   $$('.pv__thumbs button').forEach(function (b) {
     b.addEventListener('click', function () {

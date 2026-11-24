@@ -4,11 +4,11 @@
   'use strict';
 
   var KR = window.KR, D = KR.DATA;
-  var $ = KR.$, $$ = KR.$$, money = KR.money, esc = KR.esc, wa = KR.wa, SITE = KR.SITE;
+  var $ = KR.$, $$ = KR.$$, money = KR.money, esc = KR.esc, wa = KR.wa, SITE = KR.SITE, t = KR.t;
   var PAGE = 24;
   // При смене раздела адрес страницы меняется без перезагрузки, поэтому корень сайта берём абсолютным путём,
   // а относительные ссылки в шапке и подвале сразу превращаем в полные.
-  var ROOT = new URL(KR.ROOT || '.', location.href).pathname;
+  var ROOT = KR.ROOT;
   $$('a[href]').forEach(function (a) { if (!/^(#|[a-z]+:)/i.test(a.getAttribute('href'))) a.setAttribute('href', a.href); });
   var purl = function (v) { return ROOT + 'magazin/product/' + v[4] + '/'; }; // отдельная страница фасовки, её видят поисковики
 
@@ -88,18 +88,18 @@
     return p.v.filter(function (v) { return v[2] > 0; })[0] || p.v[0];
   };
   var plus = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
-  var label = function (v, i) { return v[1] || 'Вариант ' + (i + 1); };
+  var label = function (v, i) { return v[1] || t('Вариант ') + (i + 1); };
   var packsHtml = function (p, cur, limit) {
     if (p.v.length < 2) return '';
     var list = p.v.map(function (v, i) { return { v: v, i: i }; });
     var cut = limit && list.length > limit ? list.slice(0, limit - 1) : list;
     if (cut.length < list.length && !cut.some(function (x) { return x.v === cur; })) cut[cut.length - 1] = list.filter(function (x) { return x.v === cur; })[0];
-    return '<div class="packs" role="group" aria-label="Фасовка">' + cut.map(function (x) {
+    return t('<div class="packs" role="group" aria-label="Фасовка">') + cut.map(function (x) {
       return '<button type="button" class="pack' + (x.v === cur ? ' is-on' : '') + '" data-pack="' + x.v[0] + '" aria-pressed="' + (x.v === cur) + '">' + esc(label(x.v, x.i)) + '</button>';
-    }).join('') + (cut.length < list.length ? '<a class="pack pack--more" href="' + purl(cur) + '" data-open="' + p.id + '">ещё ' + (list.length - cut.length) + '</a>' : '') + '</div>';
+    }).join('') + (cut.length < list.length ? '<a class="pack pack--more" href="' + purl(cur) + '" data-open="' + p.id + '">' + t('ещё {0}').replace('{0}', list.length - cut.length) + '</a>' : '') + '</div>';
   };
   var priceHtml = function (v) {
-    if (!v[2]) return '<span class="pcard__ask">Цена по запросу</span>';
+    if (!v[2]) return t('<span class="pcard__ask">Цена по запросу</span>');
     return '<b>' + money(v[2]) + '</b>' + (v[3] > v[2] ? '<s>' + money(v[3]) + '</s>' : '');
   };
   var cardHtml = function (it) {
@@ -116,8 +116,8 @@
         '<div class="pcard__row">' +
           '<p class="pcard__price">' + priceHtml(v) + '</p>' +
           (v[2]
-            ? '<button class="padd" type="button" data-add="' + v[0] + '" aria-label="Добавить в корзину: ' + esc(p.n) + '">' + plus + '<span class="padd__n"' + (inCart ? '' : ' hidden') + '>' + inCart + '</span></button>'
-            : '<a class="padd" href="' + wa('Здравствуйте! Подскажите цену: ' + p.n + (v[1] ? ', ' + v[1] : '') + '.') + '" target="_blank" rel="noopener" aria-label="Спросить цену в WhatsApp">?</a>') +
+            ? '<button class="padd" type="button" data-add="' + v[0] + t('" aria-label="Добавить в корзину: ') + esc(p.n) + '">' + plus + '<span class="padd__n"' + (inCart ? '' : ' hidden') + '>' + inCart + '</span></button>'
+            : '<a class="padd" href="' + wa(t('Здравствуйте! Подскажите цену: ') + p.n + (v[1] ? ', ' + v[1] : '') + '.') + t('" target="_blank" rel="noopener" aria-label="Спросить цену в WhatsApp">?</a>')) +
         '</div>' +
       '</div>' +
     '</article>';
@@ -132,7 +132,7 @@
     var html = part.map(function (it, i) { return '<li class="is-new" style="--n:' + Math.min(i, 14) + '">' + cardHtml(it) + '</li>'; }).join('');
     if (from) grid.insertAdjacentHTML('beforeend', html); else grid.innerHTML = html;
     $('#more').hidden = shown >= list.length;
-    if (!$('#more').hidden) $('#more').textContent = 'Показать ещё ' + Math.min(PAGE, list.length - shown);
+    if (!$('#more').hidden) $('#more').textContent = t('Показать ещё {0}').replace('{0}', Math.min(PAGE, list.length - shown));
   };
 
   var treeHtml = function (nodes, open) {
@@ -149,16 +149,16 @@
     var cur = st.cat ? catBy[st.cat] : null, path = cur ? pathOf(cur) : [];
 
     // заголовок и «хлебные крошки»
-    $('#cataTitle').textContent = st.q ? 'Поиск: ' + st.q : cur ? cur.name : 'Каталог';
-    document.title = (cur ? cur.name + ' — ' : '') + 'каталог KRASKO, Ташкент';
-    $('#cataCount').textContent = list.length + ' ' + plural(list.length, 'товар', 'товара', 'товаров');
-    $('#crumbs').innerHTML = '<a href="' + ROOT + 'index.html">Главная</a><span aria-hidden="true">/</span>' +
-      (cur ? '<a href="' + ROOT + 'catalog.html" data-cat="">Каталог</a>' + path.slice(0, -1).map(function (c) { return '<span aria-hidden="true">/</span><a href="' + ROOT + 'magazin/folder/' + c.slug + '/" data-cat="' + c.slug + '">' + esc(c.name) + '</a>'; }).join('') : '<span>Каталог</span>');
+    $('#cataTitle').textContent = st.q ? t('Поиск: ') + st.q : cur ? cur.name : t('Каталог');
+    document.title = (cur ? cur.name + ' — ' : '') + t('каталог KRASKO, Ташкент');
+    $('#cataCount').textContent = list.length + ' ' + plural(list.length, t('товар'), t('товара'), t('товаров'));
+    $('#crumbs').innerHTML = '<a href="' + ROOT + t('index.html">Главная</a><span aria-hidden="true">/</span>') +
+      (cur ? '<a href="' + ROOT + t('catalog.html" data-cat="">Каталог</a>') + path.slice(0, -1).map(function (c) { return '<span aria-hidden="true">/</span><a href="' + ROOT + 'magazin/folder/' + c.slug + '/" data-cat="' + c.slug + '">' + esc(c.name) + '</a>'; }).join('') : t('<span>Каталог</span>'));
 
     // дерево разделов (компьютер) и ленты (телефон)
-    $('#tree').innerHTML = '<li><button type="button" data-cat="" class="' + (st.cat ? '' : 'is-on') + '"><span>Все товары</span><i>' + items.length + '</i></button></li>' + treeHtml(tops, path);
+    $('#tree').innerHTML = '<li><button type="button" data-cat="" class="' + (st.cat ? '' : 'is-on') + t('"><span>Все товары</span><i>') + items.length + '</i></button></li>' + treeHtml(tops, path);
     var top = path[0];
-    $('#chips').innerHTML = '<button type="button" class="chip' + (st.cat ? '' : ' is-on') + '" data-cat="">Все</button>' +
+    $('#chips').innerHTML = '<button type="button" class="chip' + (st.cat ? '' : ' is-on') + t('" data-cat="">Все</button>') +
       tops.map(function (c) { return '<button type="button" class="chip' + (top === c ? ' is-on' : '') + '" data-cat="' + c.slug + '">' + esc(c.name) + '</button>'; }).join('');
     var sub = $('#chipsSub');
     sub.hidden = !(top && top.kids.length);
@@ -174,9 +174,9 @@
     var vis = allBrands ? names : names.slice(0, 10);
     $('#brands').innerHTML = vis.map(function (b) {
       return '<li><label class="check"><input type="checkbox" data-brand="' + esc(b) + '"' + (st.brands.indexOf(b) >= 0 ? ' checked' : '') + '><span>' + esc(b) + '</span><i>' + (counts[b] || 0) + '</i></label></li>';
-    }).join('') || '<li class="pv__wait">Брендов нет</li>';
+    }).join('') || t('<li class="pv__wait">Брендов нет</li>');
     $('#brandsMore').hidden = allBrands || names.length <= 10;
-    $('#brandsMore').textContent = 'Все бренды (' + names.length + ')';
+    $('#brandsMore').textContent = t('Все бренды (') + names.length + ')';
     $('#sale').checked = st.sale;
     $('#sort').value = st.sort;
 
@@ -184,16 +184,16 @@
     var tags = [];
     if (st.q) tags.push('<button type="button" class="tag" data-drop="q">«' + esc(st.q) + '»</button>');
     st.brands.forEach(function (b) { tags.push('<button type="button" class="tag" data-drop="brand" data-v="' + esc(b) + '">' + esc(b) + '</button>'); });
-    if (st.sale) tags.push('<button type="button" class="tag" data-drop="sale">Со скидкой</button>');
+    if (st.sale) tags.push(t('<button type="button" class="tag" data-drop="sale">Со скидкой</button>'));
     $('#tags').innerHTML = tags.join('');
     var nf = st.brands.length + (st.sale ? 1 : 0);
     $('#filtN').hidden = !nf; $('#filtN').textContent = nf;
     $('#reset').hidden = !(nf || st.q || st.cat);
-    $('#filtApply').textContent = 'Показать ' + list.length + ' ' + plural(list.length, 'товар', 'товара', 'товаров');
+    $('#filtApply').textContent = t('Показать {0}').replace('{0}', list.length + ' ' + plural(list.length, t('товар'), t('товара'), t('товаров')));
     $('#q').value = st.q; $('#qx').hidden = !st.q;
 
     $('#none').hidden = !!list.length;
-    $('#noneWa').href = wa('Здравствуйте! Ищу товар' + (st.q ? ': ' + st.q : '') + '. Подскажите, есть ли в наличии?');
+    $('#noneWa').href = wa(t('Здравствуйте! Ищу товар') + (st.q ? ': ' + st.q : '') + t('. Подскажите, есть ли в наличии?'));
     drawGrid(0);
     writeUrl();
   };
@@ -278,35 +278,35 @@
     var gal = info && info.g && info.g.length ? info.g : [[p.i, p.i]];
     if (pvImg >= gal.length) pvImg = 0;
     var home = p.h >= 0 ? cats[p.h] : null;
-    var ask = wa('Здравствуйте! Вопрос по товару: ' + p.n + (v[1] ? ', ' + v[1] : '') + '.');
+    var ask = wa(t('Здравствуйте! Вопрос по товару: ') + p.n + (v[1] ? ', ' + v[1] : '') + '.');
     pvBody.innerHTML =
       '<div class="pv__grid">' +
         '<div class="pv__media">' +
           '<div class="pv__main"><img src="' + SITE + esc(gal[pvImg][0]) + '" alt="' + esc(p.n) + '" referrerpolicy="no-referrer"></div>' +
-          (gal.length > 1 ? '<div class="pv__thumbs">' + gal.map(function (g, i) { return '<button type="button" data-img="' + i + '" class="' + (i === pvImg ? 'is-on' : '') + '" aria-label="Фото ' + (i + 1) + '"><img src="' + SITE + esc(g[0]) + '" alt="" loading="lazy" referrerpolicy="no-referrer"></button>'; }).join('') + '</div>' : '') +
+          (gal.length > 1 ? '<div class="pv__thumbs">' + gal.map(function (g, i) { return '<button type="button" data-img="' + i + '" class="' + (i === pvImg ? 'is-on' : '') + t('" aria-label="Фото ') + (i + 1) + '"><img src="' + SITE + esc(g[0]) + '" alt="" loading="lazy" referrerpolicy="no-referrer"></button>'; }).join('') + '</div>' : '') +
         '</div>' +
         '<div class="pv__info">' +
           '<span class="pv__brand">' + esc(p.b) + '</span>' +
           '<h2 class="pv__name" id="pvName">' + esc(p.n) + '</h2>' +
-          (p.v.length > 1 ? '<p class="pv__label">Фасовка</p>' + packsHtml(p, v, 0) : '') +
-          '<p class="pv__price">' + (v[2] ? '<b>' + money(v[2] * pvQty) + '</b>' + (off ? '<s>' + money(v[3] * pvQty) + '</s><i>−' + off + '%</i>' : '') : '<b>Цена по запросу</b>') + '</p>' +
+          (p.v.length > 1 ? t('<p class="pv__label">Фасовка</p>') + packsHtml(p, v, 0) : '') +
+          '<p class="pv__price">' + (v[2] ? '<b>' + money(v[2] * pvQty) + '</b>' + (off ? '<s>' + money(v[3] * pvQty) + '</s><i>−' + off + '%</i>' : '') : t('<b>Цена по запросу</b>')) + '</p>' +
           (v[2]
-            ? '<div class="pv__buy"><div class="qty"><button type="button" data-q="-1" aria-label="Меньше">−</button><span>' + pvQty + '</span><button type="button" data-q="1" aria-label="Больше">+</button></div>' +
-              '<button type="button" class="btn btn--main" data-add="' + v[0] + '" data-qty="' + pvQty + '">В корзину</button></div>'
-            : '<div class="pv__buy"><a class="btn btn--main" href="' + ask + '" target="_blank" rel="noopener">Узнать цену в WhatsApp</a></div>') +
-          '<a class="pv__wa" href="' + ask + '" target="_blank" rel="noopener">Задать вопрос в WhatsApp</a>' +
-          '<a class="pv__wa pv__page" href="' + purl(v) + '">Открыть страницу товара</a>' +
+            ? t('<div class="pv__buy"><div class="qty"><button type="button" data-q="-1" aria-label="Меньше">−</button><span>') + pvQty + t('</span><button type="button" data-q="1" aria-label="Больше">+</button></div>') +
+              '<button type="button" class="btn btn--main" data-add="' + v[0] + '" data-qty="' + pvQty + t('">В корзину</button></div>')
+            : '<div class="pv__buy"><a class="btn btn--main" href="' + ask + t('" target="_blank" rel="noopener">Узнать цену в WhatsApp</a></div>')) +
+          '<a class="pv__wa" href="' + ask + t('" target="_blank" rel="noopener">Задать вопрос в WhatsApp</a>') +
+          '<a class="pv__wa pv__page" href="' + purl(v) + t('">Открыть страницу товара</a>') +
         '</div>' +
       '</div>' +
       '<div class="pv__more">' +
         (info
-          ? (info.d.length ? '<div class="pv__desc"><h3>Описание</h3>' + descHtml(info.d) + '</div>' : '') +
-            (info.p.length || v[1] ? '<div><h3>Характеристики</h3><dl class="pv__params">' +
-              (v[1] && p.v.length > 1 ? '<div><dt>Фасовка</dt><dd>' + esc(v[1]) + '</dd></div>' : '') +
+          ? (info.d.length ? t('<div class="pv__desc"><h3>Описание</h3>') + descHtml(info.d) + '</div>' : '') +
+            (info.p.length || v[1] ? t('<div><h3>Характеристики</h3><dl class="pv__params">') +
+              (v[1] && p.v.length > 1 ? t('<div><dt>Фасовка</dt><dd>') + esc(v[1]) + '</dd></div>' : '') +
               info.p.map(function (x) { return '<div><dt>' + esc(x[0]) + '</dt><dd>' + esc(x[1]) + '</dd></div>'; }).join('') +
-              (home ? '<div><dt>Раздел</dt><dd><a href="' + ROOT + 'magazin/folder/' + home.slug + '/" data-cat="' + home.slug + '" data-pv-close style="text-decoration:underline">' + esc(home.name) + '</a></dd></div>' : '') +
+              (home ? t('<div><dt>Раздел</dt><dd><a href="') + ROOT + 'magazin/folder/' + home.slug + '/" data-cat="' + home.slug + '" data-pv-close style="text-decoration:underline">' + esc(home.name) + '</a></dd></div>' : '') +
             '</dl></div>' : '')
-          : '<p class="pv__wait">' + (info === null ? 'Описание не загрузилось. Спросите в WhatsApp, расскажем подробно.' : 'Загружаем описание…') + '</p>') +
+          : '<p class="pv__wait">' + (info === null ? t('Описание не загрузилось. Спросите в WhatsApp, расскажем подробно.') : t('Загружаем описание…')) + '</p>') +
       '</div>';
   };
   var descHtml = function (d) {
@@ -339,7 +339,7 @@
     pvBody.scrollTop = 0;
     if (fresh) $('.pv__bar button').focus();
     if (pvInfo[id] === undefined) {
-      fetch(ROOT + 'data/p/' + id + '.json').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      fetch(KR.ASSET + (KR.LANG === 'uz' ? 'data/p-uz/' : 'data/p/') + id + '.json').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
         .then(function (j) { pvInfo[id] = j; }, function () { pvInfo[id] = null; })
         .then(function () { if (pvId === id && !pv.hidden) drawPv(); });
     }
