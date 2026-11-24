@@ -145,12 +145,14 @@
     };
   };
 
-  var add = function (kind, qty) {
+  // snap — данные с самой кнопки: на странице товара каталог (js/data.js) не грузится
+  var add = function (kind, qty, snap) {
     var hit = byKind[kind];
-    if (!hit) return false;
-    var p = hit.p, v = hit.v;
+    var item = hit ? { n: (hit.p.b ? hit.p.b + ' · ' : '') + hit.p.n, k: hit.v[1], p: hit.v[2], i: hit.p.i }
+      : snap && snap.name && +snap.price > 0 ? { n: snap.name, k: snap.pack || '', p: +snap.price, i: snap.img || '' } : null;
+    if (!item) return false;
     if (cart[kind]) cart[kind].q += qty || 1;
-    else cart[kind] = { n: (p.b ? p.b + ' · ' : '') + p.n, k: v[1], p: v[2], i: p.i, q: qty || 1 };
+    else { item.q = qty || 1; cart[kind] = item; }
     save(); renderCart(true);
     return true;
   };
@@ -159,7 +161,7 @@
     var t = e.target.closest('[data-add],[data-inc],[data-dec],[data-cart-open],[data-cart-close]');
     if (!t) return;
     if (t.dataset.add) {
-      if (!add(t.dataset.add, parseInt(t.dataset.qty, 10) || 1)) return;
+      if (!add(t.dataset.add, parseInt(t.dataset.qty, 10) || 1, t.dataset)) return;
       fly(t); tick();
       t.classList.add('is-added');
       setTimeout(function () { t.classList.remove('is-added'); }, 700);
@@ -216,7 +218,8 @@
   renderCart();
 
   window.KR = {
-    WA: WA, SITE: SITE, DATA: DATA, reduce: reduce, isSheet: isSheet,
+    WA: WA, SITE: SITE, DATA: DATA, ROOT: window.KR_ROOT || '', // ROOT — путь к корню сайта с вложенных страниц
+    reduce: reduce, isSheet: isSheet,
     $: $, $$: $$, money: money, wa: wa, esc: esc, off: off, tick: tick, store: store,
     byKind: byKind, bySlug: bySlug,
     paint: function () { return paint; }, setPaint: setPaint,

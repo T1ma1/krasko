@@ -6,6 +6,11 @@
   var KR = window.KR, D = KR.DATA;
   var $ = KR.$, $$ = KR.$$, money = KR.money, esc = KR.esc, wa = KR.wa, SITE = KR.SITE;
   var PAGE = 24;
+  // При смене раздела адрес страницы меняется без перезагрузки, поэтому корень сайта берём абсолютным путём,
+  // а относительные ссылки в шапке и подвале сразу превращаем в полные.
+  var ROOT = new URL(KR.ROOT || '.', location.href).pathname;
+  $$('a[href]').forEach(function (a) { if (!/^(#|[a-z]+:)/i.test(a.getAttribute('href'))) a.setAttribute('href', a.href); });
+  var purl = function (v) { return ROOT + 'magazin/product/' + v[4] + '/'; }; // отдельная страница фасовки, её видят поисковики
 
   /* ---------- разделы ---------- */
   var cats = D.cats.map(function (c, i) { return { i: i, slug: c[0], name: c[1], parent: c[2], n: c[3], kids: [] }; });
@@ -34,7 +39,7 @@
   var shown = PAGE, allBrands = false;
   var readUrl = function () {
     var u = new URLSearchParams(location.search);
-    st.cat = catBy[u.get('cat')] ? u.get('cat') : '';
+    st.cat = catBy[u.get('cat')] ? u.get('cat') : catBy[window.KR_CAT] ? window.KR_CAT : ''; // KR_CAT задаёт страница раздела
     st.q = (u.get('q') || '').slice(0, 80);
     st.brands = (u.get('b') || '').split('|').filter(Boolean);
     st.sale = u.get('sale') === '1';
@@ -47,8 +52,10 @@
     if (st.brands.length) u.set('b', st.brands.join('|'));
     if (st.sale) u.set('sale', '1');
     if (st.sort !== 'def') u.set('sort', st.sort);
+    // раздел живёт в адресе страницы (/magazin/folder/<раздел>/), остальное — в параметрах
+    u.delete('cat');
     var s = u.toString();
-    history.replaceState(null, '', location.pathname + (s ? '?' + s : '') + location.hash);
+    history.replaceState(null, '', ROOT + (st.cat ? 'magazin/folder/' + st.cat + '/' : 'catalog.html') + (s ? '?' + s : '') + location.hash);
   };
 
   // ignore: какой фильтр не учитывать (чтобы посчитать, сколько товаров даст каждый бренд)
@@ -89,7 +96,7 @@
     if (cut.length < list.length && !cut.some(function (x) { return x.v === cur; })) cut[cut.length - 1] = list.filter(function (x) { return x.v === cur; })[0];
     return '<div class="packs" role="group" aria-label="Фасовка">' + cut.map(function (x) {
       return '<button type="button" class="pack' + (x.v === cur ? ' is-on' : '') + '" data-pack="' + x.v[0] + '" aria-pressed="' + (x.v === cur) + '">' + esc(label(x.v, x.i)) + '</button>';
-    }).join('') + (cut.length < list.length ? '<a class="pack pack--more" href="#p=' + p.id + '">ещё ' + (list.length - cut.length) + '</a>' : '') + '</div>';
+    }).join('') + (cut.length < list.length ? '<a class="pack pack--more" href="' + purl(cur) + '" data-open="' + p.id + '">ещё ' + (list.length - cut.length) + '</a>' : '') + '</div>';
   };
   var priceHtml = function (v) {
     if (!v[2]) return '<span class="pcard__ask">Цена по запросу</span>';
@@ -98,13 +105,13 @@
   var cardHtml = function (it) {
     var p = it.p, v = varOf(p), off = KR.off(v), inCart = KR.inCart(v[0]);
     return '<article class="pcard" data-card data-id="' + p.id + '">' +
-      '<a class="pcard__pic" href="#p=' + p.id + '" tabindex="-1" aria-hidden="true">' +
+      '<a class="pcard__pic" href="' + purl(v) + '" data-open="' + p.id + '" tabindex="-1" aria-hidden="true">' +
         (off ? '<span class="pcard__flag">−' + off + '%</span>' : '') +
         '<img src="' + SITE + esc(p.i) + '" alt="" loading="lazy" width="350" height="350" referrerpolicy="no-referrer">' +
       '</a>' +
       '<div class="pcard__body">' +
         '<span class="pcard__brand">' + esc(p.b) + '</span>' +
-        '<h3 class="pcard__name"><a href="#p=' + p.id + '">' + esc(p.n) + '</a></h3>' +
+        '<h3 class="pcard__name"><a href="' + purl(v) + '" data-open="' + p.id + '">' + esc(p.n) + '</a></h3>' +
         packsHtml(p, v, 4) +
         '<div class="pcard__row">' +
           '<p class="pcard__price">' + priceHtml(v) + '</p>' +
@@ -145,8 +152,8 @@
     $('#cataTitle').textContent = st.q ? 'Поиск: ' + st.q : cur ? cur.name : 'Каталог';
     document.title = (cur ? cur.name + ' — ' : '') + 'каталог KRASKO, Ташкент';
     $('#cataCount').textContent = list.length + ' ' + plural(list.length, 'товар', 'товара', 'товаров');
-    $('#crumbs').innerHTML = '<a href="index.html">Главная</a><span aria-hidden="true">/</span>' +
-      (cur ? '<a href="catalog.html" data-cat="">Каталог</a>' + path.slice(0, -1).map(function (c) { return '<span aria-hidden="true">/</span><a href="catalog.html?cat=' + c.slug + '" data-cat="' + c.slug + '">' + esc(c.name) + '</a>'; }).join('') : '<span>Каталог</span>');
+    $('#crumbs').innerHTML = '<a href="' + ROOT + 'index.html">Главная</a><span aria-hidden="true">/</span>' +
+      (cur ? '<a href="' + ROOT + 'catalog.html" data-cat="">Каталог</a>' + path.slice(0, -1).map(function (c) { return '<span aria-hidden="true">/</span><a href="' + ROOT + 'magazin/folder/' + c.slug + '/" data-cat="' + c.slug + '">' + esc(c.name) + '</a>'; }).join('') : '<span>Каталог</span>');
 
     // дерево разделов (компьютер) и ленты (телефон)
     $('#tree').innerHTML = '<li><button type="button" data-cat="" class="' + (st.cat ? '' : 'is-on') + '"><span>Все товары</span><i>' + items.length + '</i></button></li>' + treeHtml(tops, path);
@@ -196,9 +203,14 @@
 
   /* ---------- события ---------- */
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-cat],[data-pack],[data-drop],[data-filt-close],[data-pv-close]');
+    var t = e.target.closest('[data-open],[data-cat],[data-pack],[data-drop],[data-filt-close],[data-pv-close]');
     if (!t) return;
-    if (t.hasAttribute('data-cat')) {
+    if (t.dataset.open) {
+      // обычный клик открывает окно товара; «открыть в новой вкладке» ведёт на страницу товара
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+      e.preventDefault();
+      location.hash = 'p=' + t.dataset.open;
+    } else if (t.hasAttribute('data-cat')) {
       e.preventDefault();
       setCat(t.dataset.cat);
       if (!t.closest('.rails')) window.scrollTo({ top: 0, behavior: KR.reduce ? 'auto' : 'smooth' });
@@ -265,7 +277,7 @@
     var p = it.p, v = varOf(p), off = KR.off(v), info = pvInfo[p.id];
     var gal = info && info.g && info.g.length ? info.g : [[p.i, p.i]];
     if (pvImg >= gal.length) pvImg = 0;
-    var home = p.c.length ? cats[p.c[p.c.length - 1]] : null;
+    var home = p.h >= 0 ? cats[p.h] : null;
     var ask = wa('Здравствуйте! Вопрос по товару: ' + p.n + (v[1] ? ', ' + v[1] : '') + '.');
     pvBody.innerHTML =
       '<div class="pv__grid">' +
@@ -283,6 +295,7 @@
               '<button type="button" class="btn btn--main" data-add="' + v[0] + '" data-qty="' + pvQty + '">В корзину</button></div>'
             : '<div class="pv__buy"><a class="btn btn--main" href="' + ask + '" target="_blank" rel="noopener">Узнать цену в WhatsApp</a></div>') +
           '<a class="pv__wa" href="' + ask + '" target="_blank" rel="noopener">Задать вопрос в WhatsApp</a>' +
+          '<a class="pv__wa pv__page" href="' + purl(v) + '">Открыть страницу товара</a>' +
         '</div>' +
       '</div>' +
       '<div class="pv__more">' +
@@ -291,7 +304,7 @@
             (info.p.length || v[1] ? '<div><h3>Характеристики</h3><dl class="pv__params">' +
               (v[1] && p.v.length > 1 ? '<div><dt>Фасовка</dt><dd>' + esc(v[1]) + '</dd></div>' : '') +
               info.p.map(function (x) { return '<div><dt>' + esc(x[0]) + '</dt><dd>' + esc(x[1]) + '</dd></div>'; }).join('') +
-              (home ? '<div><dt>Раздел</dt><dd><a href="catalog.html?cat=' + home.slug + '" data-cat="' + home.slug + '" data-pv-close style="text-decoration:underline">' + esc(home.name) + '</a></dd></div>' : '') +
+              (home ? '<div><dt>Раздел</dt><dd><a href="' + ROOT + 'magazin/folder/' + home.slug + '/" data-cat="' + home.slug + '" data-pv-close style="text-decoration:underline">' + esc(home.name) + '</a></dd></div>' : '') +
             '</dl></div>' : '')
           : '<p class="pv__wait">' + (info === null ? 'Описание не загрузилось. Спросите в WhatsApp, расскажем подробно.' : 'Загружаем описание…') + '</p>') +
       '</div>';
@@ -326,7 +339,7 @@
     pvBody.scrollTop = 0;
     if (fresh) $('.pv__bar button').focus();
     if (pvInfo[id] === undefined) {
-      fetch('data/p/' + id + '.json').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      fetch(ROOT + 'data/p/' + id + '.json').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
         .then(function (j) { pvInfo[id] = j; }, function () { pvInfo[id] = null; })
         .then(function () { if (pvId === id && !pv.hidden) drawPv(); });
     }

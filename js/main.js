@@ -164,7 +164,7 @@
     var p = hit.p, v = hit.v, off = KR.off(v);
     var title = p.n + (v[1] ? ', ' + v[1] : '');
     return '<li><article class="good" data-card>' +
-      '<a class="good__pic" href="catalog.html#p=' + p.id + '" aria-label="' + esc(title) + '">' +
+      '<a class="good__pic" href="magazin/product/' + v[4] + '/" aria-label="' + esc(title) + '">' +
         '<img src="' + SITE + esc(p.i) + '" alt="" loading="lazy" width="350" height="350" referrerpolicy="no-referrer">' +
       '</a>' +
       '<div class="good__body">' +
